@@ -1,8 +1,9 @@
 package com.library.management.service;
 
-public interface BooksService {
+import com.library.management.domain.Book;
 
-	//upload
-	//download
-	//search
+public interface BooksService {
+	
+	public void handleBookUpload(Book book);
+	public void handleBookDownload(Book book);
 }

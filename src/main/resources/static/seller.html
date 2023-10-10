@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Seller Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        #result-message {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Seller Page</h1>
+    <div class="container">
+        <form id="book-form" enctype="multipart/form-data">
+            <label for="book-name">Book Name:</label>
+            <input type="text" id="book-name" name="bookName" required><br>
+
+            <label for="book-author">Author:</label>
+            <input type="text" id="book-author" name="author" required><br>
+
+            <label for="book-genre">Genre:</label>
+            <input type="text" id="book-genre" name="genre" required><br>
+
+            <label for="book-price">Price:</label>
+            <input type="number" id="book-price" name="price" required><br>
+
+            <label for="pdf-file">Upload PDF:</label>
+            <input type="file" id="pdf-file" name="pdfFile" accept=".pdf" required><br>
+
+            <button type="submit" id="upload-button">Upload Book</button>
+        </form>
+
+        <div id="result-message"></div>
+    </div>
+
+    <script>
+        document.getElementById('book-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/upload-endpoint', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('result-message').innerHTML = '<span style="color: green;">Book uploaded successfully.</span>';
+                        // You can reset the form if needed
+                        // document.getElementById('book-form').reset();
+                    } else {
+                        document.getElementById('result-message').innerHTML = '<span style="color: red;">Error uploading book.</span>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result-message').innerHTML = '<span style="color: red;">An error occurred.</span>';
+                });
+        });
+    </script>
+</body>
+
+</html>
