@@ -1,11 +1,15 @@
 package com.library.management.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
 import com.library.management.domain.User;
@@ -17,6 +21,8 @@ import com.library.management.service.BooksService;
 public class OnlineLibraryManagementController {
 
 	private UserRepository userRepository;
+	
+	@Autowired
 	private BooksService bookService;
 
 	@RequestMapping(method = RequestMethod.GET, path = "/status")
@@ -36,10 +42,18 @@ public class OnlineLibraryManagementController {
 		return "Saved";
 	}
 
-	@PostMapping("/upload")
-	public String handleFileUpload(@RequestBody Book book) {
-
-		return "";
+	@PostMapping("/uploadBook")
+	public String handleFileUpload(@RequestPart("pdfFile") MultipartFile file,   @RequestParam("bookname") String bookName,
+		    @RequestParam("author") String author,
+		    @RequestParam("genre") String genre,
+		    @RequestParam("price") double price) {
+		
+		System.out.println("book data " + bookName + " " + author + " " + genre + " " + price);
+		
+		Book book = new Book(bookName,author,genre,price,file);
+		bookService.handleBookUpload(book);
+		System.out.println("Book uploaded");
+		return "Ok";
 
 	}
 

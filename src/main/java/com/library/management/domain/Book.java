@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class Book {
 	
+	private String bookId;
+	
 	private String bookname;
 	
 	private String author;
@@ -19,6 +21,23 @@ public class Book {
 	private MultipartFile file;
 
 	private String Seller; // Book has a seller (Considering only one seller is uploading this book)
+	
+	public Book(String name, String author, String genre, double price, MultipartFile file) {
+		this.bookname = name;
+		this.author = author;
+		this.genre = genre;
+		this.price = price;
+		this.file = file;
+	}
+	
+	public String getBookId() {
+		return bookId;
+	}
+	
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
+	}
+	
 	
 	public String getSeller() {
 		return Seller;
