@@ -14,8 +14,11 @@ import com.library.management.domain.User;
 import com.library.management.repository.UserRepository;
 
 public class UserRepositoryImpl implements UserRepository {
-	
-	//TODO: really need to implement everything?
+	@Override
+	public <S extends User> S save(S entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public void flush() {
@@ -101,11 +104,7 @@ public class UserRepositoryImpl implements UserRepository {
 		return null;
 	}
 
-	@Override
-	public <S extends User> S save(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public Optional<User> findById(Long id) {
@@ -202,7 +201,6 @@ public class UserRepositoryImpl implements UserRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	
 }

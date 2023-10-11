@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Inventory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .book-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-image {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Book Inventory</h1>
+    <div class="container">
+        <label for="search">Search:</label>
+        <input type="text" id="search" placeholder="Search...">
+        <label for="filter">Filter by:</label>
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="bookName">Book Name</option>
+            <option value="author">Author</option>
+            <option value="genre">Genre</option>
+        </select>
+
+        <div id="book-list">
+            <!-- Book cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Sample book data (replace with your actual data)
+        const books = [
+            {
+                bookName: "Book 1",
+                author: "Author 1",
+                genre: "Fiction",
+                imageUrl: "book1.jpg",
+            },
+            {
+                bookName: "Book 2",
+                author: "Author 2",
+                genre: "Mystery",
+                imageUrl: "book2.jpg",
+            },
+            // Add more books here
+        ];
+
+        // Function to display books based on search and filter criteria
+        function displayBooks() {
+            const search = document.getElementById("search").value.toLowerCase();
+            const filter = document.getElementById("filter").value;
+
+            const bookList = document.getElementById("book-list");
+            bookList.innerHTML = "";
+
+            books.forEach(book => {
+                if (
+                    (filter === "all" || book[filter].toLowerCase().includes(search)) &&
+                    search !== ""
+                ) {
+                    const bookCard = document.createElement("div");
+                    bookCard.className = "book-card";
+
+                    const image = document.createElement("img");
+                    image.className = "book-image";
+                    image.src = book.imageUrl;
+                    bookCard.appendChild(image);
+
+                    const details = document.createElement("div");
+                    details.innerHTML = `
+                        <p><strong>Book Name:</strong> ${book.bookName}</p>
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>Genre:</strong> ${book.genre}</p>
+                    `;
+                    bookCard.appendChild(details);
+
+                    bookList.appendChild(bookCard);
+                }
+            });
+        }
+
+        // Initial display of all books
+        displayBooks();
+
+        // Add event listeners for search and filter
+        document.getElementById("search").addEventListener("input", displayBooks);
+        document.getElementById("filter").addEventListener("change", displayBooks);
+    </script>
+</body>
+
+</html>
