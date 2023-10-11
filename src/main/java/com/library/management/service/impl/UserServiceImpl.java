@@ -1,12 +1,19 @@
 package com.library.management.service.impl;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.library.management.domain.Seller;
 import com.library.management.domain.User;
 import com.library.management.repository.UserRepository;
 import com.library.management.service.UserService;
+import com.library.management.utils.Roles;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,6 +44,11 @@ public class UserServiceImpl implements UserService {
 			return user;
 		}
 		return null; // TODO: throw exception - Authentication failed
+	}
+	
+	@Override
+	public Seller getUserByUserType(Roles role) {
+		return userRepository.findByUserType(role);
 	}
 
 }

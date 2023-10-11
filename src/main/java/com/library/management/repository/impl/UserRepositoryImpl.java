@@ -1,8 +1,12 @@
 package com.library.management.repository.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+
+import javax.management.relation.Role;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -10,10 +14,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
+import com.library.management.domain.Seller;
 import com.library.management.domain.User;
 import com.library.management.repository.UserRepository;
+import com.library.management.storage.InMemoryAuthentication;
+import com.library.management.utils.Roles;
 
 public class UserRepositoryImpl implements UserRepository {
+	
+	InMemoryAuthentication auth = new InMemoryAuthentication();
+	
 	@Override
 	public <S extends User> S save(S entity) {
 		// TODO Auto-generated method stub
@@ -200,6 +210,12 @@ public class UserRepositoryImpl implements UserRepository {
 	public User findByUsername(String username) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public Seller findByUserType(Roles role) {
+		Seller response = auth.getSeller(); //TO DO: Remove or use in case of in-memory data/sql
+		return response;
 	}
 
 	

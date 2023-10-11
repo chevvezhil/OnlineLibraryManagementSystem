@@ -1,8 +1,13 @@
 package com.library.management.storage;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import com.library.management.domain.Seller;
 import com.library.management.domain.User;
 
 public class InMemoryAuthentication {
@@ -43,5 +48,20 @@ public class InMemoryAuthentication {
         
         System.out.println("username doesnt exists " + username);
         return null;
+    }
+    
+  //TO DO: Remove when DB is integrated
+    public Seller getSeller() {
+    	var username ="homi@gmail.com";
+    	Seller response = new Seller (username, 1234567890L, false);
+    	if (usersDb.containsKey(username)) {
+            System.out.println("User Exits for Admin page");
+            
+            for(Map.Entry<String, User> map : usersDb.entrySet()) {
+            	response = new Seller (map.getValue().getuserName(), 1234567890L, false);
+            	System.out.println(map.getKey() + map.getValue().getuserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
+            }
+    	}
+    	return response;
     }
 }
