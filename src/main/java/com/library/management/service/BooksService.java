@@ -8,6 +8,6 @@ public interface BooksService {
 	
 	public void handleBookUpload(Book book);
 	public void handleBookDownload(Book book);
-	public List<Book> searchBook(String id);
+	public List<Book> searchBook(String criteria, String kwyword);
 }
 
