@@ -9,6 +9,7 @@ import com.library.management.domain.Book;
 public class InMemoryBookStorage {
 
 	private static List<Book> books = new ArrayList<>();
+	//Map<sellerId, List<book>>
 
 	public static List<Book> getAllBooks() {
 		return books;

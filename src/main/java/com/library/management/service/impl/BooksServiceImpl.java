@@ -44,7 +44,7 @@ public class BooksServiceImpl implements BooksService {
 
 	@Override
 	public void handleBookDownload(Book book) {
-		// TODO Auto-generated method stub
+		// TODO : Check whether the payment is completed
 		
 	}
 
