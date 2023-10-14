@@ -1,7 +1,6 @@
 package com.library.management.service.impl;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
+import com.library.management.service.BooksService;
+import com.library.management.service.SearchService;
 import com.library.management.storage.InMemoryBookStorage;
 
 @Service
-public class BooksServiceImpl implements com.library.management.service.BooksService {
+public class BooksServiceImpl implements BooksService {
 
 	 @Value("${file.path}")
     private String uploadDirectory;
@@ -48,9 +49,10 @@ public class BooksServiceImpl implements com.library.management.service.BooksSer
 	}
 
 	@Override
-	public List<Book> searchBook(String id) {
-		// TODO Auto-generated method stub
-		return new ArrayList<Book>();
+	public List<Book> searchBook(String criteria, String keyword) {
+		SearchService search  = new SearchService();
+		search.setSearchStrategy(criteria);
+		return search.searchBooks(keyword);
 	}
 
 }
