@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
-@Table(name = "USER_MASTER")
+@Table(name = "user_master")
 public class User {
 
 	@Setter

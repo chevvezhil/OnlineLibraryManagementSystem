@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Bookstore</title>
+	<style>
+		/* CSS styles go here */
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f1f1f1;
+		}
+
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #1a73d2;
+			color: #fff;
+			padding: 10px;
+		}
+
+		#search-container {
+			display: flex;
+			align-items: center;
+		}
+
+		#search-box {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 16px;
+		}
+
+		#filter {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 16px;
+			background: #fff;
+			color: #333;
+			margin-left: 10px;
+		}
+
+		#search-button {
+			background-color: #ee5656;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			padding: 15px 15px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
+
+		#book-list {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.book {
+			border: 1px solid #ddd;
+			margin: 10px;
+			padding: 10px;
+			width: 200px;
+			border-radius: 5px;
+		}
+
+		#cart {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			padding: 20px;
+			cursor: pointer;
+		}
+
+		#cart-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.6);
+			z-index: 1000;
+		}
+
+		#cart-popup {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			width: 400px;
+			height: 400px;
+			z-index: 1001;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		}
+
+		#cart-items {
+			list-style-type: none;
+			padding: 0;
+		}
+
+		#cart-items li {
+			margin: 10px 0;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		#proceed-button {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			padding: 10px 15px;
+			margin-top: 10px;
+			cursor: pointer;
+		}
+
+		#cartButton {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 16px;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<div id="search-container">
+			<input type="text" id="search-box" placeholder="Search by Book, Author, Genre">
+			<select id="filter">
+				<option value="book">Book</option>
+				<option value="author">Author</option>
+				<option value="genre">Genre</option>
+			</select>
+			<button id="search-button">Search</button>
+		</div>
+		<div id="cart">Cart (0)</div>
+	</header>
+
+	<div id="book-list">
+		<!-- Book items will be dynamically added here -->
+	</div>
+
+	<div id="cart-overlay"></div>
+	<div id="cart-popup">
+		<h2>Your Cart</h2>
+		<ul id="cart-items">
+			<!-- Cart items will be dynamically added here -->
+		</ul>
+		<p>Total Amount: $<span id="total-amount">0</span></p>
+		<button id="proceed-button">Proceed to Payment</button>
+	</div>
+
+	<script>
+		// JavaScript code goes here
+		const bookList = document.getElementById("book-list");
+		const searchBox = document.getElementById("search-box");
+		const filter = document.getElementById("filter");
+		const searchButton = document.getElementById("search-button");
+		const cart = document.getElementById("cart");
+		const cartOverlay = document.getElementById("cart-overlay");
+		const cartPopup = document.getElementById("cart-popup");
+		const cartItems = document.getElementById("cart-items");
+		const totalAmount = document.getElementById("total-amount");
+		const proceedButton = document.getElementById("proceed-button");
+
+		let cartData = [];
+
+		// Sample data for book listings (replace this with actual API calls)
+		const books = [
+			{title: "Book 1", author: "Author 1", genre: "Genre 1", price: 10},
+			{title: "Book 2", author: "Author 2", genre: "Genre 2", price: 15},
+			// Add more books here
+		];
+
+		// Display the books on page load
+		function displayBooks(bookArray) {
+			bookList.innerHTML = "";
+			bookArray.forEach((book, index) => {
+				const bookItem = document.createElement("div");
+				bookItem.className = "book";
+				bookItem.innerHTML = `
+                    <h2>${book.title}</h2>
+                    <p>Author: ${book.author}</p>
+                    <p>Genre: ${book.genre}</p>
+                    <p>Price: $${book.price}</p>
+                    <button onclick="addToCart(${index})" id=cartButton>Add to Cart</button>
+                `;
+				bookList.appendChild(bookItem);
+			});
+		}
+
+		displayBooks(books);
+
+		// Add book to the cart
+		function addToCart(index) {
+			const book = books[index];
+			cartData.push(book);
+			updateCartUI();
+		}
+
+		// Update the cart UI
+		function updateCartUI() {
+			cartItems.innerHTML = "";
+			let total = 0;
+			cartData.forEach((book) => {
+				const cartItem = document.createElement("li");
+				cartItem.innerHTML = `
+                    <span>${book.title}</span>
+                    <span>$${book.price}</span>
+                `;
+				cartItems.appendChild(cartItem);
+				total += book.price;
+			});
+			totalAmount.textContent = total;
+			cart.textContent = `Cart (${cartData.length})`;
+
+		}
+
+		// Handle proceed to payment
+		proceedButton.addEventListener("click", () => {
+			// You can implement payment logic here (e.g., show a payment form)
+			// For simplicity, we'll just clear the cart in this example
+			cartData = [];
+			updateCartUI();
+			cartOverlay.style.display = "none";
+			cartPopup.style.display = "none";
+		});
+
+		// Handle search button click
+		searchButton.addEventListener("click", () => {
+			const searchTerm = searchBox.value;
+			const selectedFilter = filter.value;
+			const filteredBooks = books.filter((book) =>
+				book[selectedFilter].toLowerCase().includes(searchTerm.toLowerCase())
+			);
+			displayBooks(filteredBooks);
+		});
+
+		// Show/hide cart popup on cart button click
+		cart.addEventListener("click", () => {
+			if (cartData.length > 0) {
+				cartOverlay.style.display = "block";
+				cartPopup.style.display = "block";
+			}
+		});
+
+		
+		cartOverlay.addEventListener("click", (e) => {
+			if (e.target === cartOverlay) {
+				cartOverlay.style.display = "none";
+				cartPopup.style.display = "none";
+			}
+		});
+	</script>
+</body>
+
+</html>
