@@ -4,7 +4,6 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 100vh;
 }
 
@@ -36,7 +35,7 @@ h1 {
 #sellerTable th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #04AA6D;
   color: white;
 }

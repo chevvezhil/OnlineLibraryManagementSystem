@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,10 +28,17 @@ public class UserController {
 	
 	InMemoryAuthentication auth = new InMemoryAuthentication();
     
-	@GetMapping("/api/sellerDetails")
+	@GetMapping("/api/admin/sellerDetails")
     @ResponseBody
-    public ResponseEntity<Seller> getSellerDetails() {
-		Seller response = userService.getUserByUserType(Roles.SELLER);
+    public ResponseEntity<List<Seller>> getSellerDetails() {
+		List<Seller> response = userService.getUserByUserType(Roles.SELLER);
+    	return ResponseEntity.ok(response);
+    }
+	
+	@PostMapping("api/admin/updateVerificationStatus")
+	@ResponseBody
+	public ResponseEntity<String> updateVerificationStatus(@RequestBody Seller seller) {
+		String response = userService.updateVerificationStatus(seller.getSellerName(), seller.getSellerId());
     	return ResponseEntity.ok(response);
     }
 	

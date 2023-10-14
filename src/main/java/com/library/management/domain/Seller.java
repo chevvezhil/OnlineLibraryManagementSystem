@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.library.management.utils.VerificationStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,13 +28,13 @@ public class Seller {
 	@Column(name = "sellerName")
 	private String sellerName;
 	
-	@Column(name = "isVerified")
-	private boolean isVerified;
-	
-	public Seller (String sellerName, Long sellerId, boolean isVerified) {
+	@Column(name = "verificationStatus")
+	private VerificationStatus verificationStatus;
+
+	public Seller (String sellerName, Long sellerId, VerificationStatus verificationStatus) {
 		this.sellerId = sellerId;
 		this.sellerName = sellerName;
-		this.isVerified = isVerified;
+		this.verificationStatus = verificationStatus;
 	}
 	
 	public String getSellerName() {
@@ -51,12 +53,12 @@ public class Seller {
 		this.sellerId = sellerId;
 	}
 	
-	public void setIsVerified(boolean isVerified) {
-		this.isVerified = isVerified;
+	public void setVerificationStatus(VerificationStatus verificationStatus) {
+		this.verificationStatus = verificationStatus;
 	}
 	
-	public boolean getIsVerified() {
-		return isVerified;
+	public VerificationStatus getVerificationStatus() {
+		return verificationStatus;
 	}
 	
 }

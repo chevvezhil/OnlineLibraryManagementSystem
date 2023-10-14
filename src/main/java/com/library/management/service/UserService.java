@@ -1,5 +1,7 @@
 package com.library.management.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.library.management.domain.Seller;
@@ -11,6 +13,6 @@ public interface UserService {
 	
 	 String registerUser(User user);
 	 User authenticateUser(String username, String password);
-	 Seller getUserByUserType(Roles role);
-
+	 List<Seller> getUserByUserType(Roles role);
+	 String updateVerificationStatus(String sellerName, Long sellerId);
 }

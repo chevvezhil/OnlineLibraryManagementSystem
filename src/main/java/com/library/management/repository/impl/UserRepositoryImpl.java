@@ -213,10 +213,15 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 	
 	@Override
-	public Seller findByUserType(Roles role) {
-		Seller response = auth.getSeller(); //TO DO: Remove or use in case of in-memory data/sql
+	public List<Seller> findByUserType(Roles role) {
+		List<Seller> response = auth.getSeller(role); //TO DO: Remove or use in case of in-memory data/sql
 		return response;
 	}
 
+	@Override
+	public String updateVerificationStatus(String sellerName, Long sellerId) {
+		String response = auth.updateVerificationStatus(sellerName, sellerId);
+		return response;
+	}
 	
 }

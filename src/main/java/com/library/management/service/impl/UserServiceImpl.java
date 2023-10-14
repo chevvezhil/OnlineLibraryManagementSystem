@@ -47,8 +47,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Seller getUserByUserType(Roles role) {
+	public List<Seller> getUserByUserType(Roles role) {
 		return userRepository.findByUserType(role);
+	}
+	
+	@Override
+	public String updateVerificationStatus(String sellerName, Long sellerId) {
+		return userRepository.updateVerificationStatus(sellerName, sellerId);
 	}
 
 }

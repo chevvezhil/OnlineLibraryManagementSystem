@@ -41,6 +41,10 @@ public class User {
 		return userName;
 	}
 	
+	public Long getuserId() {
+		return userId;
+	}
+	
 	public void setUserName(String username) {
 		this.userName = username;
 	}
