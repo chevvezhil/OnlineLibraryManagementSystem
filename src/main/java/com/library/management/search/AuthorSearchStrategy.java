@@ -13,7 +13,6 @@ public class AuthorSearchStrategy implements SearchStrategy {
 		return books.stream().filter(book -> book.getAuthor().equalsIgnoreCase(keyword))
 				.collect(Collectors.toList());
 				
-		
 	}
 
 }
