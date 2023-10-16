@@ -36,9 +36,9 @@ public class AuthenticationController {
     @ResponseBody
     public ResponseEntity<String> loginUser(@RequestBody User user) {
        
-    	System.out.println("user name " + user.getuserName() + " password " + user.getPassword());
+    	System.out.println("user name " + user.getUserName() + " password " + user.getPassword());
     	
-    	String role= auth.login(user.getuserName(), user.getPassword());
+    	String role= auth.login(user.getUserName(), user.getPassword());
     	System.out.println("Role " + role);
     	return ResponseEntity.ok(role);
        
