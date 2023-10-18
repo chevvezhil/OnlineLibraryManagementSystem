@@ -7,7 +7,7 @@ import com.library.management.domain.User;
 @Service
 public interface UserService {
 	
-	 String registerUser(User user);
+	 User registerUser(User user);
 	 User authenticateUser(String username, String password);
 
 }

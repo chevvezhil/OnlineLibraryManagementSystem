@@ -21,24 +21,18 @@ public class AuthenticationController {
 	
 	InMemoryAuthentication auth = new InMemoryAuthentication();
 
-    @PostMapping("/register")
-    @ResponseBody
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-    	
-    	String response = auth.register(user);
-    	
-    	return ResponseEntity.ok(response);
-    	//TODO: enable Once db is working properly
-      //  return userService.registerUser(user);
-    }
+	@PostMapping("/registerUser")
+	public @ResponseBody User addNewUser(@RequestBody User user) {
+		return userService.registerUser(user);
+	}
 
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<String> loginUser(@RequestBody User user) {
        
-    	System.out.println("user name " + user.getuserName() + " password " + user.getPassword());
+    	System.out.println("user name " + user.getUserName() + " password " + user.getPassword());
     	
-    	String role= auth.login(user.getuserName(), user.getPassword());
+    	String role= auth.login(user.getUserName(), user.getPassword());
     	System.out.println("Role " + role);
     	return ResponseEntity.ok(role);
        

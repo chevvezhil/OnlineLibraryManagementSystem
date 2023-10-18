@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.Setter;
 
 @Entity
+@Data
 @AllArgsConstructor
 @Table(name = "user_master")
 public class User {
@@ -22,44 +23,45 @@ public class User {
 	@Setter
 	@Column(name = "user_name")
 	private String userName;
-	
+
+	@Column(name = "password")
 	private String password;
-	
-	 @Id
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long userId;
-	
+
 	@Column(name = "user_role")
 	private String userRole;
-	
+
 	@CreationTimestamp
-    @Column(name = "created_time", updatable = false)
+	@Column(name = "created_time", updatable = false)
 	private Date userCreationTime;
-	
-	public String getuserName() {
+
+	public String getUserName() {
 		return userName;
 	}
-	
-	public void setUserName(String username) {
-		this.userName = username;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	
-	public String getUserRole() {
-		return userRole;
-	}
-	
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
-		this.password= password;
+		this.password = password;
 	}
 
-	
+
+	public String getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+
 }
