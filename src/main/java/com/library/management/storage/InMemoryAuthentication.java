@@ -1,16 +1,11 @@
 package com.library.management.storage;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.library.management.domain.Book;
 import com.library.management.domain.Seller;
 import com.library.management.domain.User;
 import com.library.management.utils.Roles;
@@ -25,16 +20,16 @@ public class InMemoryAuthentication {
 
     public String register(User user) {
     	
-    	String userName = user.getuserName();
+    	String userName = user.getUserName();
     	Random random = new Random(); // TO DO: Remove after UserId is generating successfully and map it with SellerId
-    	
+
     	System.out.println("role " + user.getUserRole());
     	
         if (!usersDb.containsKey(userName)) {
             usersDb.put(userName, user);
             users.add(user);
             if(user.getUserRole().toLowerCase().equals("seller")) {
-            	var seller = new Seller(user.getuserName(), Math.abs(random.nextLong()), VerificationStatus.REQUESTED); // Update it with UserId
+            	var seller = new Seller(user.getUserName(), Math.abs(random.nextLong()), VerificationStatus.REQUESTED); // Update it with UserId
             	sellerDb.put(userName, seller);
             	sellers.add(seller);
             }
@@ -42,7 +37,7 @@ public class InMemoryAuthentication {
         }
         
         for(Map.Entry<String, User> map : usersDb.entrySet()) {
-        	System.out.println(map.getKey() + map.getValue().getuserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
+        	System.out.println(map.getKey() + map.getValue().getUserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
         }
         
         return "Already Exists";
@@ -55,7 +50,7 @@ public class InMemoryAuthentication {
             System.out.println("Exits");
             
             for(Map.Entry<String, User> map : usersDb.entrySet()) {
-            	System.out.println(map.getKey() + map.getValue().getuserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
+            	System.out.println(map.getKey() + map.getValue().getUserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
             }
             
             if(user.getPassword().equals(password))

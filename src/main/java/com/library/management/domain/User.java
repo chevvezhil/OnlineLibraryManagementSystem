@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.Setter;
 
 @Entity
+@Data
 @AllArgsConstructor
 @Table(name = "user_master")
 public class User {
@@ -22,14 +23,15 @@ public class User {
 	@Setter
 	@Column(name = "user_name")
 	private String userName;
-	
+
+	@Column(name = "password")
 	private String password;
-	
-	 @Id
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long userId;
-	
+
 	@Column(name = "user_role")
 	private String userRole;
 	
@@ -37,7 +39,7 @@ public class User {
     @Column(name = "created_time", updatable = false)
 	private Date userCreationTime;
 	
-	public String getuserName() {
+	public String getUserName() {
 		return userName;
 	}
 	
@@ -65,5 +67,4 @@ public class User {
 		this.password= password;
 	}
 
-	
 }
