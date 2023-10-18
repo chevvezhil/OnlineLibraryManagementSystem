@@ -13,29 +13,23 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-
 	@Override
-	public String registerUser(User user) {
-		user.setUserName(user.getuserName());
+	public User registerUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setUserRole(user.getUserRole());
-		 userRepository.save(user);
-		 
-		System.out.println("registration success ");
-
-		 return "Success";
+		return userRepository.save(user);
 	}
 
 	@Override
 	public User authenticateUser(String username, String password) {
-		User user = userRepository.findByUsername(username);
-		
-		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-			return user;
-		}
+		//User user = userRepository.findByUsername(username);
+
+//		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+//			return user;
+//		}
 		return null; // TODO: throw exception - Authentication failed
 	}
 

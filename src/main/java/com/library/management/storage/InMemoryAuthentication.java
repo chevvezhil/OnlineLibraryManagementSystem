@@ -11,7 +11,7 @@ public class InMemoryAuthentication {
 
     public String register(User user) {
     	
-    	String userName = user.getuserName();
+    	String userName = user.getUserName();
     	
     	System.out.println("role " + user.getUserRole());
     	
@@ -21,7 +21,7 @@ public class InMemoryAuthentication {
         }
         
         for(Map.Entry<String, User> map : usersDb.entrySet()) {
-        	System.out.println(map.getKey() + map.getValue().getuserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
+        	System.out.println(map.getKey() + map.getValue().getUserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
         }
         
         return "Already Exists";
@@ -34,7 +34,7 @@ public class InMemoryAuthentication {
             System.out.println("Exits");
             
             for(Map.Entry<String, User> map : usersDb.entrySet()) {
-            	System.out.println(map.getKey() + map.getValue().getuserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
+            	System.out.println(map.getKey() + map.getValue().getUserName() + " " + map.getValue().getPassword() +" " +map.getValue().getUserRole());
             }
             
             if(user.getPassword().equals(password))
