@@ -1,7 +1,5 @@
 package com.library.management.domain;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class Book {
 	
 	private String bookId;
@@ -18,16 +16,13 @@ public class Book {
 	
 	private double price;
 	
-	private MultipartFile file;
-
 	private String Seller; // Book has a seller (Considering only one seller is uploading this book)
 	
-	public Book(String name, String author, String genre, double price, MultipartFile file) {
+	public Book(String name, String author, String genre, double price) {
 		this.bookname = name;
 		this.author = author;
 		this.genre = genre;
 		this.price = price;
-		this.file = file;
 	}
 	
 	public String getBookId() {
@@ -47,13 +42,6 @@ public class Book {
 		Seller = seller;
 	}
 
-	public MultipartFile getFile() {
-		return file;
-	}
-
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
 
 	public String getBookname() {
 		return bookname;

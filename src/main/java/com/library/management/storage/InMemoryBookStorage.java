@@ -1,8 +1,13 @@
 package com.library.management.storage;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import com.library.management.domain.Book;
 
@@ -10,6 +15,9 @@ public class InMemoryBookStorage {
 
 	private static List<Book> books = new ArrayList<>();
 	//Map<sellerId, List<book>>
+	
+	 @Value("${file.path}")
+	 private static String uploadDirectory;
 
 	public static List<Book> getAllBooks() {
 		return books;
@@ -17,7 +25,6 @@ public class InMemoryBookStorage {
 
 	public static void addBook(Book book) {
 		books.add(book);
-		System.out.println("Books " + books);
 		System.out.println("Book has been added successfully");
 	}
 

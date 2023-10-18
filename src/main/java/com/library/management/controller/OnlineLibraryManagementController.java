@@ -3,8 +3,11 @@ package com.library.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +49,7 @@ public class OnlineLibraryManagementController {
 	}
 
 	@PostMapping("/uploadBook")
+	@ResponseBody
 	public String handleFileUpload(@RequestPart("pdfFile") MultipartFile file,   @RequestParam("bookname") String bookName,
 		    @RequestParam("author") String author,
 		    @RequestParam("genre") String genre,
@@ -53,16 +57,28 @@ public class OnlineLibraryManagementController {
 		
 		System.out.println("book data " + bookName + " " + author + " " + genre + " " + price);
 		
-		Book book = new Book(bookName,author,genre,price,file);
-		bookService.handleBookUpload(book);
+		Book book = new Book(bookName,author,genre,price);
+		bookService.handleBookUpload(book, file);
 		System.out.println("Book uploaded");
 		return "Ok";
 
 	}
 	
-	@GetMapping("/SearchBook")
-	public List<Book> searchBooks(@RequestParam String criteria, @RequestParam String keyword){
+	@GetMapping("/searchBooks/{criteria}/{keyword}")
+	@ResponseBody
+	public List<Book> searchBooks(@PathVariable String criteria, @PathVariable String keyword){
 		return bookService.searchBook(criteria, keyword);
 	}
+	
+	@GetMapping(value = "/getBooks")
+	public @ResponseBody List<Book> getAllBooks(){
+        return bookService.getAllBooks();
 
+	}
+	
+	public @ResponseBody String makeOrder(@RequestParam("books") List<Book> books) {
+		return "";
+	}
+	
+	
 }

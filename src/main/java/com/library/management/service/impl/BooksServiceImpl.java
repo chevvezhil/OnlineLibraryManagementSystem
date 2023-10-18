@@ -11,6 +11,7 @@ import com.library.management.domain.Book;
 import com.library.management.service.BooksService;
 import com.library.management.service.SearchService;
 import com.library.management.storage.InMemoryBookStorage;
+import com.library.management.utils.ProjectUtils;
 
 @Service
 public class BooksServiceImpl implements BooksService {
@@ -19,33 +20,32 @@ public class BooksServiceImpl implements BooksService {
     private String uploadDirectory;
 	
 	@Override
-	public void handleBookUpload(Book book) {
+	public void handleBookUpload(Book book, MultipartFile file) {
 		
 	try {
-		MultipartFile file = book.getFile();
 		
 		if(!file.isEmpty()) {
-             String fileName = book.getBookname() + ".pdf"; 
-             String filePath = uploadDirectory + fileName;
-             
-             System.out.println("upload directory "  + uploadDirectory);
+             String filePath = uploadDirectory + book.getBookname() + ".pdf";
+             book.setPdfUrl(filePath);
              
              File dest = new File(filePath);
              file.transferTo(dest);
-
+             
+             book.setBookId(ProjectUtils.getId());
              InMemoryBookStorage.addBook(book);
 		}
 		
 	}catch(Exception e) {
+		  e.printStackTrace(); 
 		System.out.println("Exception " + e);
 	}
 		
 	}
 
 	@Override
-	public void handleBookDownload(Book book) {
-		// TODO : Check whether the payment is completed
+	public String handleBookDownload(Book book) {
 		
+		return "";
 	}
 
 	@Override
@@ -53,6 +53,10 @@ public class BooksServiceImpl implements BooksService {
 		SearchService search  = new SearchService();
 		search.setSearchStrategy(criteria);
 		return search.searchBooks(keyword);
+	}
+	
+	public List<Book> getAllBooks(){
+		return InMemoryBookStorage.getAllBooks();
 	}
 
 }
