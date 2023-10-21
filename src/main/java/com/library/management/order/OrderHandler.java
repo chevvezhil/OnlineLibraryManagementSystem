@@ -1,5 +1,7 @@
 package com.library.management.order;
 
+import com.library.management.domain.Order;
+
 public abstract class OrderHandler {
 	
 	protected OrderHandler nextHandler;

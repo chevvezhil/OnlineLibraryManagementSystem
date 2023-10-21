@@ -127,6 +127,43 @@
 			border-radius: 5px;
 			font-size: 16px;
 		}
+
+		#loader {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255, 255, 255, 0.7);
+			/* Semi-transparent white background */
+			z-index: 1000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.spinner {
+			border: 4px solid rgba(255, 255, 255, 0.3);
+			/* Light gray border */
+			border-top: 4px solid #007bff;
+			/* Blue border (adjust color as needed) */
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			animation: spin 1s linear infinite;
+			/* Add a spinning animation */
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
 	</style>
 </head>
 
@@ -152,10 +189,15 @@
 		<h2>Your Cart</h2>
 		<ul id="cart-items"></ul>
 		<p>Total Amount: <span id="total-amount">0</span></p>
-		<button id="proceed-button">Proceed to Payment</button>
+		<button id="proceed-button">Proceed to Buy</button>
+	</div>
+
+	<div id="loader">
+		<div class="spinner"></div>
 	</div>
 
 	<script>
+		hideLoader();
 
 		const baseUrl = 'http://localhost:8080/library';
 
@@ -172,7 +214,7 @@
 		const totalAmount = document.getElementById("total-amount");
 		const proceedButton = document.getElementById("proceed-button");
 
-		let cartData = []
+		let cartData = [];
 
 		searchButton.addEventListener("click", searchBook);
 
@@ -183,93 +225,142 @@
 			const encodedCriteria = encodeURIComponent(criteria);
 			const encodedKeyword = encodeURIComponent(keyword);
 
-			fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
-				.then(response => {
-					console.log("url ", `http://localhost:8080/library/searchBooks/${criteria}/${keyword}`);
-					return response.json();
-				})
-				.then(data => {
+			showLoader();
 
+			fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
+				.then(response => response.json())
+				.then(data => {
 					if (data.length === 0) {
 						alert("No Books Available");
 					} else {
 						displayBooks(data);
 					}
+					hideLoader(); // Hide the loader after fetching data.
 				})
 				.catch(error => {
 					console.error('Error:', error);
+					hideLoader(); // Hide the loader if there's an error.
 				});
 		}
 
 		function getAllBooks() {
-
+			showLoader();
 			fetch(`${baseUrl}/getBooks`)
 				.then(response => response.json())
 				.then(data => {
-					console.log("bookdata ", data);
 					displayBooks(data);
+					hideLoader(); // Hide the loader after fetching data.
 				})
 				.catch(error => {
 					console.error('Error:', error);
+					hideLoader(); // Hide the loader if there's an error.
 				});
 		}
-		// Display the books on page load
+
+		let books = [];
+
 		function displayBooks(bookArray) {
-			console.log("book array ", bookArray);
+			books = bookArray;
 			bookList.innerHTML = "";
 			bookArray.forEach((book, index) => {
 				const bookItem = document.createElement("div");
 				bookItem.className = "book";
 				bookItem.innerHTML = `
-                    <h2>${book.bookname}</h2>
-                    <p>Author: ${book.author}</p>
-                    <p>Genre: ${book.genre}</p>
-                    <p>Price: ${book.price} rs</p>
-                    <button onclick="addToCart(${index})" id=cartButton>Add to Cart</button>
-                `;
+          <h2>${book.bookname}</h2>
+          <p>Author: ${book.author}</p>
+          <p>Genre: ${book.genre}</p>
+          <p>Price: ${book.price} rs</p>
+          <button onclick="addToCart(${index})" id=cartButton>Add to Cart</button>`;
 				bookList.appendChild(bookItem);
 			});
 		}
 
 		getAllBooks();
 
-		// Add book to the cart
 		function addToCart(index) {
 			const book = books[index];
 			cartData.push(book);
 			updateCartUI();
 		}
 
-		// Update the cart UI
 		function updateCartUI() {
 			cartItems.innerHTML = "";
 			let total = 0;
 			cartData.forEach((book) => {
 				const cartItem = document.createElement("li");
 				cartItem.innerHTML = `
-                    <span>${book.title}</span>
-                    <span>$${book.price}</span>
-                `;
+          <span>${book.bookname}</span>
+          <span>${book.price} Rs</span>
+        `;
 				cartItems.appendChild(cartItem);
 				total += book.price;
 			});
 			totalAmount.textContent = total;
 			cart.textContent = `Cart (${cartData.length})`;
-
 		}
 
-		// Handle proceed to payment
 		proceedButton.addEventListener("click", () => {
-			// You can implement payment logic here (e.g., show a payment form)
-			// For simplicity, we'll just clear the cart in this example
-			cartData = [];
-			updateCartUI();
-			cartOverlay.style.display = "none";
-			cartPopup.style.display = "none";
+			const order = {
+				books: cartData,
+			}
+			if (cartData.length > 0) {
+				fetch('http://localhost:8080/library/processOrder', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(order),
+				})
+					.then((response) => {
+						if (response.ok) {
+							return response.text(); 
+						} else {
+							console.error('Error downloading books');
+						}
+					})
+					.then((base64Content) => {
+						const binaryData = atob(base64Content);
+
+						const uint8Array = new Uint8Array(binaryData.length);
+						for (let i = 0; i < binaryData.length; i++) {
+							uint8Array[i] = binaryData.charCodeAt(i);
+						}
+
+						const blob = new Blob([uint8Array], {type: 'application/zip'});
+
+						const a = document.createElement('a');
+						a.href = window.URL.createObjectURL(blob);
+						a.download = 'books.zip';
+						a.style.display = 'none';
+						document.body.appendChild(a);
+						a.click();
+						document.body.removeChild(a);
+					})
+					.catch((error) => {
+						console.error('Error:', error);
+					});
+
+				cartData = [];
+				updateCartUI();
+				cartOverlay.style.display = "none";
+				cartPopup.style.display = "none";
+			}
 		});
 
 
-		// Show/hide cart popup on cart button click
+
+		function showLoader() {
+			const loader = document.getElementById("loader");
+			loader.style.display = "block";
+		}
+
+		function hideLoader() {
+			const loader = document.getElementById("loader");
+			loader.style.display = "none";
+		}
+
+
+
 		cart.addEventListener("click", () => {
 			if (cartData.length > 0) {
 				cartOverlay.style.display = "block";
@@ -284,6 +375,8 @@
 				cartPopup.style.display = "none";
 			}
 		});
+
+
 	</script>
 </body>
 

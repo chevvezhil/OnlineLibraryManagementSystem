@@ -3,6 +3,9 @@ package com.library.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
+import com.library.management.domain.Order;
 import com.library.management.domain.User;
+import com.library.management.order.OrderDownloadHandler;
+import com.library.management.order.OrderValidationHandler;
+import com.library.management.order.PaymentProcessingHandler;
 import com.library.management.service.BooksService;
 import com.library.management.service.UserService;
+import com.library.management.order.*;
 
 @RestController
 @RequestMapping("/library")
@@ -68,8 +76,24 @@ public class OnlineLibraryManagementController {
 
 	}
 	
-	public @ResponseBody String makeOrder(@RequestParam("books") List<Book> books) {
-		return "";
+	@PostMapping("/processOrder")
+	public ResponseEntity<String> processOrder(@RequestBody Order order) {
+		OrderHandler orderProcessingChain = new OrderValidationHandler(
+				new PaymentProcessingHandler(
+				new OrderDownloadHandler(null)
+						));
+		
+		String zipFiles = orderProcessingChain.processOrder(order);
+		
+		HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=books.zip");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/zip"))
+                .body(zipFiles);
+		
+		
 	}
 	
 	

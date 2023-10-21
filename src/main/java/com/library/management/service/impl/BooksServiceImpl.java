@@ -16,46 +16,47 @@ import com.library.management.utils.ProjectUtils;
 @Service
 public class BooksServiceImpl implements BooksService {
 
-	 @Value("${file.path}")
-    private String uploadDirectory;
-	
+	@Value("${file.path}")
+	private String uploadDirectory;
+
 	@Override
 	public void handleBookUpload(Book book, MultipartFile file) {
-		
-	try {
-		
-		if(!file.isEmpty()) {
-             String filePath = uploadDirectory + book.getBookname() + ".pdf";
-             book.setPdfUrl(filePath);
-             
-             File dest = new File(filePath);
-             file.transferTo(dest);
-             
-             book.setBookId(ProjectUtils.getId());
-             InMemoryBookStorage.addBook(book);
+
+		try {
+
+			if (!file.isEmpty()) {
+				String filePath = uploadDirectory + book.getBookname() + ".pdf";
+				book.setPdfUrl(filePath);
+
+				File dest = new File(filePath);
+				file.transferTo(dest);
+
+				book.setBookId(ProjectUtils.getId());
+				InMemoryBookStorage.addBook(book);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception " + e);
 		}
-		
-	}catch(Exception e) {
-		  e.printStackTrace(); 
-		System.out.println("Exception " + e);
-	}
-		
+
 	}
 
 	@Override
 	public String handleBookDownload(Book book) {
-		
+
 		return "";
 	}
 
+	
 	@Override
 	public List<Book> searchBook(String criteria, String keyword) {
-		SearchService search  = new SearchService();
+		SearchService search = new SearchService();
 		search.setSearchStrategy(criteria);
 		return search.searchBooks(keyword);
 	}
-	
-	public List<Book> getAllBooks(){
+
+	public List<Book> getAllBooks() {
 		return InMemoryBookStorage.getAllBooks();
 	}
 

@@ -1,14 +1,19 @@
 package com.library.management.order;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import org.apache.commons.codec.binary.Base64;
 import com.library.management.domain.Book;
-import com.library.management.service.BooksService;
+import com.library.management.domain.Order;
 
 public class OrderDownloadHandler extends OrderHandler {
 
-	private BooksService bookService;
 
 	public OrderDownloadHandler(OrderHandler orderHandler) {
 		super(orderHandler);
@@ -16,9 +21,50 @@ public class OrderDownloadHandler extends OrderHandler {
 
 	@Override
 	public String processOrder(Order order) {
-
-		Map<String, String> result = order.getBooks().stream()
-				.collect(Collectors.toMap(Book::getBookId, bookService::handleBookDownload));
-		return result.toString();
+		
+		System.out.println("Inside order download process handler");
+		byte[] zipContent = createZipArchive(order.getBooks());
+		return  Base64.encodeBase64String(zipContent);
+		
 	}
+	
+	private byte[] createZipArchive(List<Book> books) {
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream zipOut = new ZipOutputStream(baos);
+
+			books.forEach(book -> {
+				byte[] pdfContent = loadPdfContent(book.getPdfUrl());
+				if (pdfContent != null) {
+					try {
+						ZipEntry entry = new ZipEntry(book.getBookname() + ".pdf");
+						zipOut.putNextEntry(entry);
+						zipOut.write(pdfContent);
+						zipOut.closeEntry();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			zipOut.close();
+			return baos.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private byte[] loadPdfContent(String pdfFilePath) {
+
+		try {
+			Path path = Paths.get(pdfFilePath);
+			return Files.readAllBytes(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null; 
+		}
+	}
+
 }

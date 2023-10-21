@@ -1,6 +1,8 @@
 package com.library.management.order;
 
 import com.library.management.domain.Book;
+import com.library.management.domain.Order;
+
 import java.util.List;
 
 public class OrderValidationHandler extends OrderHandler {
@@ -11,7 +13,8 @@ public class OrderValidationHandler extends OrderHandler {
 
 	@Override
 	public String processOrder(Order order) {
-
+		System.out.println("Inside order validation process order");
+		
 		List<Book> books = order.getBooks();
 		boolean isNull = books.stream().anyMatch(book -> book.getBookId() == null);
 
