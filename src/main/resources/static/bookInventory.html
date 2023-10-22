@@ -302,6 +302,7 @@
 		proceedButton.addEventListener("click", () => {
 			const order = {
 				books: cartData,
+				user :localStorage.getItem("username")
 			}
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {

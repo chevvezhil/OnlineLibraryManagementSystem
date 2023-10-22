@@ -13,7 +13,6 @@ public class OrderValidationHandler extends OrderHandler {
 
 	@Override
 	public String processOrder(Order order) {
-		System.out.println("Inside order validation process order");
 		
 		List<Book> books = order.getBooks();
 		boolean isNull = books.stream().anyMatch(book -> book.getBookId() == null);

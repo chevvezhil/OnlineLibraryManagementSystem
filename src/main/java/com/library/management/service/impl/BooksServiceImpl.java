@@ -3,14 +3,15 @@ package com.library.management.service.impl;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
+import com.library.management.repository.BooksRepository;
 import com.library.management.service.BooksService;
 import com.library.management.service.SearchService;
-import com.library.management.storage.InMemoryBookStorage;
 import com.library.management.utils.ProjectUtils;
 
 @Service
@@ -19,6 +20,9 @@ public class BooksServiceImpl implements BooksService {
 	@Value("${file.path}")
 	private String uploadDirectory;
 
+	@Autowired
+	private BooksRepository bookRepository;
+
 	@Override
 	public void handleBookUpload(Book book, MultipartFile file) {
 
@@ -26,13 +30,12 @@ public class BooksServiceImpl implements BooksService {
 
 			if (!file.isEmpty()) {
 				String filePath = uploadDirectory + book.getBookname() + ".pdf";
+
 				book.setPdfUrl(filePath);
 
 				File dest = new File(filePath);
 				file.transferTo(dest);
-
-				book.setBookId(ProjectUtils.getId());
-				InMemoryBookStorage.addBook(book);
+				bookRepository.save(book);
 			}
 
 		} catch (Exception e) {
@@ -43,21 +46,15 @@ public class BooksServiceImpl implements BooksService {
 	}
 
 	@Override
-	public String handleBookDownload(Book book) {
-
-		return "";
-	}
-
-	
-	@Override
 	public List<Book> searchBook(String criteria, String keyword) {
 		SearchService search = new SearchService();
 		search.setSearchStrategy(criteria);
-		return search.searchBooks(keyword);
+		return search.searchBooks(keyword,getAllBooks());
 	}
 
 	public List<Book> getAllBooks() {
-		return InMemoryBookStorage.getAllBooks();
+		return bookRepository.findAll();
+		// return InMemoryBookStorage.getAllBooks();
 	}
 
 }

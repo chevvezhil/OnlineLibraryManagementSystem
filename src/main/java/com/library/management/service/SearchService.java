@@ -5,7 +5,6 @@ import java.util.List;
 import com.library.management.domain.Book;
 import com.library.management.search.SearchStrategy;
 import com.library.management.search.SearchStrategyFactory;
-import com.library.management.storage.InMemoryBookStorage;
 
 public class SearchService {
 	
@@ -15,8 +14,7 @@ public class SearchService {
 		searchStrategy = SearchStrategyFactory.createSearchStrategy(criteria);
 	}
 
-	public List<Book> searchBooks(String keyword){
-		List<Book> availableBooks = InMemoryBookStorage.getAllBooks();
+	public List<Book> searchBooks(String keyword, List<Book> availableBooks){
 		return searchStrategy.search(availableBooks, keyword);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,69 +33,51 @@ import com.library.management.order.*;
 public class OnlineLibraryManagementController {
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private BooksService bookService;
-
-	@GetMapping("/status")
-	public String getStatus() {
-		return "Active Library";
-	}
-
-	@PostMapping("/registerUser")
-	public @ResponseBody User addNewUser(@RequestBody User user) {
-		return userService.registerUser(user);
-	}
 
 	@PostMapping("/uploadBook")
 	@ResponseBody
-	public String handleFileUpload(@RequestPart("pdfFile") MultipartFile file,   @RequestParam("bookname") String bookName,
-		    @RequestParam("author") String author,
-		    @RequestParam("genre") String genre,
-		    @RequestParam("price") double price) {
-		
-		System.out.println("book data " + bookName + " " + author + " " + genre + " " + price);
-		
-		Book book = new Book(bookName,author,genre,price);
+	public ResponseEntity<?> handleFileUpload(@RequestPart("pdfFile") MultipartFile file,
+			@RequestParam("bookname") String bookName, @RequestParam("author") String author,
+			@RequestParam("genre") String genre, @RequestParam("price") double price,
+			@RequestParam("seller") String sellerName) {
+
+		System.out.println("book data " + bookName + " " + author + " " + genre + " " + price + "seller " + sellerName);
+
+		Book book = new Book(bookName, author, genre, price, sellerName);
 		bookService.handleBookUpload(book, file);
 
 		System.out.println("Book uploaded");
-		return "Ok";
+		return ResponseEntity.status(HttpStatus.OK).build();
 
 	}
-	
+
 	@GetMapping("/searchBooks/{criteria}/{keyword}")
 	@ResponseBody
-	public List<Book> searchBooks(@PathVariable String criteria, @PathVariable String keyword){
+	public List<Book> searchBooks(@PathVariable String criteria, @PathVariable String keyword) {
 		return bookService.searchBook(criteria, keyword);
 	}
-	
+
 	@GetMapping(value = "/getBooks")
-	public @ResponseBody List<Book> getAllBooks(){
-        return bookService.getAllBooks();
+	public @ResponseBody List<Book> getAllBooks() {
+		return bookService.getAllBooks();
 
 	}
-	
+
 	@PostMapping("/processOrder")
 	public ResponseEntity<String> processOrder(@RequestBody Order order) {
+		
 		OrderHandler orderProcessingChain = new OrderValidationHandler(
-				new PaymentProcessingHandler(
-				new OrderDownloadHandler(null)
-						));
-		
-		String zipFiles = orderProcessingChain.processOrder(order);
-		
-		HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=books.zip");
+				new PaymentProcessingHandler(new OrderDownloadHandler(null)));
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentType(MediaType.parseMediaType("application/zip"))
-                .body(zipFiles);
-		
-		
+		String zipFiles = orderProcessingChain.processOrder(order);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Disposition", "attachment; filename=books.zip");
+
+		return ResponseEntity.ok().headers(headers).contentType(MediaType.parseMediaType("application/zip"))
+				.body(zipFiles);
+
 	}
-	
-	
+
 }

@@ -1,47 +1,76 @@
 package com.library.management.domain;
 
+import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "Book_Master")
 public class Book {
-	
-	private String bookId;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "book_id")
+	private Long bookId;
+
 	private String bookname;
-	
+
 	private String author;
-	
+
 	private String genre;
-	
+
 	private String pdfUrl;
-	
+
 	private int quandity;
-	
+
 	private double price;
-	
-	private String Seller; // Book has a seller (Considering only one seller is uploading this book)
-	
-	public Book(String name, String author, String genre, double price) {
+
+	private String seller; // Book has a seller (Considering only one seller is uploading this book)
+
+	@CreationTimestamp
+	@Column(name = "created_time", updatable = false)
+	private Date bookCreationTime;
+
+	public Book(String name, String author, String genre, double price, String seller) {
 		this.bookname = name;
 		this.author = author;
 		this.genre = genre;
 		this.price = price;
+		this.seller = seller;
 	}
-	
-	public String getBookId() {
+
+	public Book() {
+
+	}
+
+	public Long getBookId() {
 		return bookId;
 	}
-	
-	public void setBookId(String bookId) {
+
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
-	
-	
+
 	public String getSeller() {
-		return Seller;
+		return seller;
 	}
 
 	public void setSeller(String seller) {
-		Seller = seller;
+		this.seller = seller;
 	}
-
 
 	public String getBookname() {
 		return bookname;
@@ -82,7 +111,7 @@ public class Book {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public String getPdfUrl() {
 		return pdfUrl;
 	}

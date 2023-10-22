@@ -22,7 +22,6 @@ public class OrderDownloadHandler extends OrderHandler {
 	@Override
 	public String processOrder(Order order) {
 		
-		System.out.println("Inside order download process handler");
 		byte[] zipContent = createZipArchive(order.getBooks());
 		return  Base64.encodeBase64String(zipContent);
 		
