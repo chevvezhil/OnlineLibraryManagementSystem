@@ -1,7 +1,5 @@
 package com.library.management.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import com.library.management.domain.User;
 import com.library.management.repository.SellerRepository;
 import com.library.management.repository.UserRepository;
 import com.library.management.service.UserService;
-import com.library.management.utils.Roles;
 import com.library.management.utils.VerificationStatus;
 
 @Service
@@ -30,14 +27,16 @@ public class UserServiceImpl implements UserService {
 	public User registerUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
+		var response = userRepository.save(user);
+		
 		if(user.getUserRole().equals("seller"))
 		{
-			var seller = new Seller(user.getUserName(), user.getUserId(), VerificationStatus.REQUESTED);
+			var seller = new Seller(user.getUserId(), user.getUserName(), VerificationStatus.REQUESTED);
 			sellerRepository.save(seller);
 			System.out.println("Seller added to seller table");
 		}
 
-		return userRepository.save(user);
+		return response;
 	}
 
 	@Override

@@ -12,10 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_master")
 public class User {
@@ -38,6 +40,4 @@ public class User {
 	@CreationTimestamp
     @Column(name = "created_time", updatable = false)
 	private Date userCreationTime;
-	
-
 }

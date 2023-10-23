@@ -29,7 +29,7 @@ public class InMemoryAuthentication {
             usersDb.put(userName, user);
             users.add(user);
             if(user.getUserRole().toLowerCase().equals("seller")) {
-            	var seller = new Seller(user.getUserName(), Math.abs(random.nextLong()), VerificationStatus.REQUESTED); // Update it with UserId
+            	var seller = new Seller(Math.abs(random.nextLong()), user.getUserName(), VerificationStatus.REQUESTED); // Update it with UserId
             	sellerDb.put(userName, seller);
             	sellers.add(seller);
             }

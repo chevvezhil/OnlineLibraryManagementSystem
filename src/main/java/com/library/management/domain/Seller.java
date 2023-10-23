@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,17 +23,22 @@ public class Seller {
 	@Column(name = "sellerId")
 	private Long sellerId;
 	
-	//TO DO:Remove SellerName after DB integration and write join query with UserTable
 	@Column(name = "sellerName")
 	private String sellerName;
 	
 	@Column(name = "verificationStatus")
 	@Enumerated(EnumType.STRING)
 	private VerificationStatus verificationStatus;
+	
+	@Column(name = "verifiedBy")
+	private String verifiedBy;
+	
+	@Column(name = "addedByAdmin", columnDefinition="boolean default false")
+	private Boolean addedByAdmin;
 
-	public Seller (String sellerName, Long sellerId, VerificationStatus verificationStatus) {
+	public Seller (Long sellerId, String sellerName, VerificationStatus verificationStatus) {
 		this.sellerId = sellerId;
 		this.sellerName = sellerName;
 		this.verificationStatus = verificationStatus;
-	}	
+	}
 }
