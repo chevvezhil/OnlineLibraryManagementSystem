@@ -39,32 +39,5 @@ public class User {
     @Column(name = "created_time", updatable = false)
 	private Date userCreationTime;
 	
-	public String getUserName() {
-		return userName;
-	}
-	
-	public Long getuserId() {
-		return userId;
-	}
-	
-	public void setUserName(String username) {
-		this.userName = username;
-	}
-	
-	public String getUserRole() {
-		return userRole;
-	}
-	
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String password) {
-		this.password= password;
-	}
 
 }

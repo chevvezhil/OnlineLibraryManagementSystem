@@ -9,6 +9,7 @@ import com.library.management.domain.User;
 import com.library.management.utils.Roles;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserName(String userName);
 
 	User findByUsername(String username);
 	List<Seller> findByUserType(Roles role);

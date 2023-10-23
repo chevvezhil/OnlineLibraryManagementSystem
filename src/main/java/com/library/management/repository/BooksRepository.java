@@ -1,5 +1,9 @@
 package com.library.management.repository;
 
-public interface BooksRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.library.management.domain.Book;
+
+public interface BooksRepository extends JpaRepository<Book, String> {
 
 }

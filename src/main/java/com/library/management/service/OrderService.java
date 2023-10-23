@@ -1,5 +1,7 @@
 package com.library.management.service;
 
-public interface OrderService {
+import com.library.management.domain.Order;
 
+public interface OrderService {
+	 Order createOrder(Order order);
 }

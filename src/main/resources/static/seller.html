@@ -95,31 +95,31 @@
 		document.getElementById('book-form').addEventListener('submit', function (e) {
 			e.preventDefault();
 
-  			const form = document.getElementById("book-form");
+			const form = document.getElementById("book-form");
 
 			const formData = new FormData(form);
+			formData.append("seller", localStorage.getItem("username"));
 			console.log("book data ", formData);
 
 
-				fetch(`${baseUrl}/uploadBook`, {
-					method: 'POST',
-					body: formData
+			fetch(`${baseUrl}/uploadBook`, {
+				method: 'POST',
+				body: formData
+			})
+				.then(response => {
+					if (response.ok) {
+						console.log("success ");
+						document.getElementById('result-message').innerHTML = '<span style="color: green;">Book uploaded successfully.</span>';
+						document.getElementById('book-form').reset();
+					} else {
+						document.getElementById('result-message').innerHTML = '<span style="color: red;">Error uploading book.</span>';
+					}
 				})
-					.then(response => response.json())
-					.then(data => {
-						if (data.success) {
-							console.log("success ");
-							document.getElementById('result-message').innerHTML = '<span style="color: green;">Book uploaded successfully.</span>';
-							document.getElementById('book-form').reset();
-						} else {
-							document.getElementById('result-message').innerHTML = '<span style="color: red;">Error uploading book.</span>';
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						document.getElementById('result-message').innerHTML = '<span style="color: red;">An error occurred.</span>';
-					});
-			});
+				.catch(error => {
+					console.error('Error:', error);
+					document.getElementById('result-message').innerHTML = '<span style="color: red;">An error occurred.</span>';
+				});
+		});
 	</script>
 </body>
 

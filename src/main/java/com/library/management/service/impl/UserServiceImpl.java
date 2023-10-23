@@ -1,9 +1,6 @@
 package com.library.management.service.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,12 +29,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User authenticateUser(String username, String password) {
-		//User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUserName(username);
 
-//		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-//			return user;
-//		}
-		return null; // TODO: throw exception - Authentication failed
+		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+			return user;
+		}
+		return null; 
 	}
 	
 	@Override

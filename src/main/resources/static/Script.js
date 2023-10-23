@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		e.preventDefault();
 		const email = document.getElementById('login-email').value;
 		const password = document.getElementById('login-password').value;
+		localStorage.setItem("username", email);
 		loginUser(email, password);
 	});
 
@@ -48,28 +49,32 @@ function registerUser(username, password, roles) {
 		userRole: roles
 	};
 
-	console.log("userData " + JSON.stringify(userData));
 	fetch(`${baseUrl}/register`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(userData)
-		
 	})
 		.then(response => {
-			if (!response.ok) {
-				throw new Error('Registration failed');
+			if (response.ok) {
+				return response.json(); // Assuming the server sends a JSON response
 			}
-			return response.text();
+			throw new Error('Registration failed');
 		})
 		.then(data => {
+			// Registration successful
 			console.log('Registration successful:', data);
+			alert("Registration Successful. Please login to proceed further");
 		})
 		.catch(error => {
+			// Registration error
 			console.error('Registration error:', error);
+			// Display an error message to the user or show a popup
+			alert('Registration failed. User name may already be taken.');
 		});
 }
+
 
 // Function to handle user login
 function loginUser(username, password) {
@@ -87,12 +92,13 @@ function loginUser(username, password) {
 	})
 		.then(response => {
 			if (!response.ok) {
+				alert("Login Failed");
 				throw new Error('Login failed');
 			}
 			return response.text();
 		})
 		.then(data => {
-			console.log("data " , data);
+			console.log("data ", data);
 			if (data === 'seller') {
 				window.location.href = '/seller.html';
 			} else if (data === 'buyer') {
@@ -102,7 +108,7 @@ function loginUser(username, password) {
 				// Redirect to the admin page
 				window.location.href = '/admin-page.html';
 			}
-			
+
 			console.log('Login successful:', data);
 		})
 		.catch(error => {

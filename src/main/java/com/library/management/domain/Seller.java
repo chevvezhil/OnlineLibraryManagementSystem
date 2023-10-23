@@ -1,9 +1,5 @@
 package com.library.management.domain;
 
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.library.management.utils.VerificationStatus;
 
 import jakarta.persistence.Column;
