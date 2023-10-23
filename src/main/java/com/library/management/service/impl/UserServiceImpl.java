@@ -1,12 +1,16 @@
 package com.library.management.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.library.management.domain.Seller;
 import com.library.management.domain.User;
 import com.library.management.repository.UserRepository;
 import com.library.management.service.UserService;
+import com.library.management.utils.Roles;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,6 +35,16 @@ public class UserServiceImpl implements UserService {
 			return user;
 		}
 		return null; 
+	}
+	
+	@Override
+	public List<Seller> getUserByUserType(Roles role) {
+		return userRepository.findByUserType(role);
+	}
+	
+	@Override
+	public String updateVerificationStatus(String sellerName, Long sellerId) {
+		return userRepository.updateVerificationStatus(sellerName, sellerId);
 	}
 
 }

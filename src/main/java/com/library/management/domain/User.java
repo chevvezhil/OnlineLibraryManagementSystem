@@ -34,34 +34,10 @@ public class User {
 
 	@Column(name = "user_role")
 	private String userRole;
-
+	
 	@CreationTimestamp
-	@Column(name = "created_time", updatable = false)
+    @Column(name = "created_time", updatable = false)
 	private Date userCreationTime;
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-	public String getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
+	
 
 }
