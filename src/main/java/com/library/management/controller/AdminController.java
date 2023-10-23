@@ -16,7 +16,7 @@ import com.library.management.service.SellerService;
 import com.library.management.storage.InMemoryAuthentication;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/admin")
 public class AdminController {
 	
 	@Autowired
