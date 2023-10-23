@@ -302,7 +302,7 @@
 		proceedButton.addEventListener("click", () => {
 			const order = {
 				books: cartData,
-				user :localStorage.getItem("username")
+				buyerId :localStorage.getItem("username")
 			}
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
@@ -336,6 +336,8 @@
 						document.body.appendChild(a);
 						a.click();
 						document.body.removeChild(a);
+						
+						alert("Your Order has been delivered :)");
 					})
 					.catch((error) => {
 						console.error('Error:', error);

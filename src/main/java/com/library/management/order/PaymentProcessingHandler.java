@@ -1,6 +1,7 @@
 package com.library.management.order;
 
 import com.library.management.domain.Order;
+import com.library.management.utils.OrderStatus;
 
 public class PaymentProcessingHandler extends OrderHandler {
 
@@ -11,12 +12,12 @@ public class PaymentProcessingHandler extends OrderHandler {
 	@Override
 	public String processOrder(Order order) {
 		
-		System.out.println("Inside payment process order handler");
-		//Note : Always payment success so moving to next handler
 		if (nextHandler != null) {
+			order.setOrderStatus(OrderStatus.PAYMENT_SUCCESS);
 			return nextHandler.processOrder(order);
 		}
 		
+		order.setOrderStatus(OrderStatus.PAYMENT_FAILURE);
 		return "Something went wrong";
 	}
 

@@ -20,13 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
 import com.library.management.domain.Order;
-import com.library.management.domain.User;
 import com.library.management.order.OrderDownloadHandler;
+import com.library.management.order.OrderHandler;
 import com.library.management.order.OrderValidationHandler;
 import com.library.management.order.PaymentProcessingHandler;
 import com.library.management.service.BooksService;
-import com.library.management.service.UserService;
-import com.library.management.order.*;
+import com.library.management.service.OrderService;
+import com.library.management.utils.OrderStatus;
 
 @RestController
 @RequestMapping("/library")
@@ -35,6 +35,23 @@ public class OnlineLibraryManagementController {
 	@Autowired
 	private BooksService bookService;
 
+	@Autowired
+	private OrderService orderService;
+	
+
+	@GetMapping("/searchBooks/{criteria}/{keyword}")
+	@ResponseBody
+	public List<Book> searchBooks(@PathVariable String criteria, @PathVariable String keyword) {
+		return bookService.searchBook(criteria, keyword);
+	}
+
+	@GetMapping(value = "/getBooks")
+	public @ResponseBody List<Book> getAllBooks() {
+		return bookService.getAllBooks();
+
+	}
+
+	
 	@PostMapping("/uploadBook")
 	@ResponseBody
 	public ResponseEntity<?> handleFileUpload(@RequestPart("pdfFile") MultipartFile file,
@@ -51,19 +68,7 @@ public class OnlineLibraryManagementController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 
 	}
-
-	@GetMapping("/searchBooks/{criteria}/{keyword}")
-	@ResponseBody
-	public List<Book> searchBooks(@PathVariable String criteria, @PathVariable String keyword) {
-		return bookService.searchBook(criteria, keyword);
-	}
-
-	@GetMapping(value = "/getBooks")
-	public @ResponseBody List<Book> getAllBooks() {
-		return bookService.getAllBooks();
-
-	}
-
+	
 	@PostMapping("/processOrder")
 	public ResponseEntity<String> processOrder(@RequestBody Order order) {
 		
@@ -72,6 +77,12 @@ public class OnlineLibraryManagementController {
 
 		String zipFiles = orderProcessingChain.processOrder(order);
 
+		if(zipFiles !=null) {
+			order.setOrderStatus(OrderStatus.SUCCESS);
+		}
+		
+		orderService.createOrder(order);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Disposition", "attachment; filename=books.zip");
 
