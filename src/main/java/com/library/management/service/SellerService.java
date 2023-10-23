@@ -9,8 +9,7 @@ import com.library.management.domain.User;
 import com.library.management.utils.Roles;
 
 @Service
-public interface UserService {
-	
-	 User registerUser(User user);
-	 User authenticateUser(String username, String password);
+public interface SellerService {
+	 List<Seller> getAllSellers();
+	 String updateVerificationStatus(Long sellerId);
 }

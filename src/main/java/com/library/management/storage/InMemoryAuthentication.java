@@ -60,25 +60,4 @@ public class InMemoryAuthentication {
         System.out.println("username doesnt exists " + username);
         return null;
     }
-    
-  //TO DO: Remove when DB is integrated
-    public List<Seller> getSeller(Roles role) {
-    	System.out.println("User Exits for Admin page");  
-    	return sellers;
-    }
-    
-    public String updateVerificationStatus(String sellerName, Long sellerId) {
-    	for(Map.Entry<String, Seller> map : sellerDb.entrySet()) {
-    		if(map.getKey().equals(sellerName)) {
-    			var seller = new Seller(map.getValue().getSellerName(), map.getValue().getSellerId(), VerificationStatus.VERIFIED); // Update it with UserId)
-        		sellerDb.put(sellerName, seller);
-        	}
-        }
-    	for(Seller seller: sellers) {
-    		if(seller.getSellerName().equals(sellerName)) {
-    			seller.setVerificationStatus(VerificationStatus.VERIFIED);
-    		}
-    	}
-    	return "Seller is Verified";
-    }
 }
