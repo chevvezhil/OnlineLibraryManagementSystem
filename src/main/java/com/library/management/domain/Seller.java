@@ -20,7 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "seller")
 public class Seller {
-
+	
+	@Id
 	@Column(name = "sellerId")
 	private Long sellerId;
 	
