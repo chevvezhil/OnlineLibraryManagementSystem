@@ -222,25 +222,31 @@
 			const keyword = searchBox.value.trim();
 			const criteria = filter.value.trim();
 
-			const encodedCriteria = encodeURIComponent(criteria);
-			const encodedKeyword = encodeURIComponent(keyword);
+			if (keyword == "") {
+				getAllBooks();
+			} else {
 
-			showLoader();
 
-			fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
-				.then(response => response.json())
-				.then(data => {
-					if (data.length === 0) {
-						alert("No Books Available");
-					} else {
-						displayBooks(data);
-					}
-					hideLoader(); // Hide the loader after fetching data.
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					hideLoader(); // Hide the loader if there's an error.
-				});
+				const encodedCriteria = encodeURIComponent(criteria);
+				const encodedKeyword = encodeURIComponent(keyword);
+
+				showLoader();
+
+				fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
+					.then(response => response.json())
+					.then(data => {
+						if (data.length === 0) {
+							alert("No Books Available");
+						} else {
+							displayBooks(data);
+						}
+						hideLoader(); // Hide the loader after fetching data.
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						hideLoader(); // Hide the loader if there's an error.
+					});
+			}
 		}
 
 		function getAllBooks() {
@@ -302,7 +308,7 @@
 		proceedButton.addEventListener("click", () => {
 			const order = {
 				books: cartData,
-				buyerId :localStorage.getItem("username")
+				buyerId: localStorage.getItem("username")
 			}
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
@@ -314,7 +320,7 @@
 				})
 					.then((response) => {
 						if (response.ok) {
-							return response.text(); 
+							return response.text();
 						} else {
 							console.error('Error downloading books');
 						}
@@ -336,7 +342,7 @@
 						document.body.appendChild(a);
 						a.click();
 						document.body.removeChild(a);
-						
+
 						alert("Your Order has been delivered :)");
 					})
 					.catch((error) => {
