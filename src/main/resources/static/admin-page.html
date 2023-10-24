@@ -8,18 +8,54 @@
 <body>
 	<div class="container">
 		<h1>Online Library Management System</h1>
-		<h1>Seller Details</h1>
-	    <table id="sellerTable">
-	        <thead>
-	            <tr>
-	                <th>Seller Id</th>
-	                <th>Seller Name</th>
-	                <th>Verification Status</th>
-	                <th>Verify Seller</th>
-	            </tr>
-	        </thead>
-	        <tbody></tbody>
-    </table>		
+		<div class="topnav">
+		  <a class="active" href="#sellerDetails">Seller Details</a>
+		  <a href="#addSeller">Add Seller</a>
+		  <a href="#bookInventory">Book Inventory</a>
+		</div>
+		<div id="sellerDetails">
+			<h1>Seller Details</h1>
+		    <table id="sellerTable" class="tables">
+		        <thead>
+		            <tr>
+		                <th>Seller Name</th>
+		                <th>Verification Status</th>
+		                <th>Verify Seller</th>
+		                <th>Remove Seller</th>
+		            </tr>
+		        </thead>
+		        <tbody></tbody>
+		    </table>
+		</div>
+		
+	    
+	    <div id="addSeller">
+			<h1>Add Seller</h1>
+			<div id="addseller-form" class="form-container">
+				<form>
+					<input type="email" id="seller-email" placeholder="Email" required>
+					<input type="password" id="seller-password" placeholder="Password" required>
+					<button type="submit" id="add-seller">Add Seller</button>
+				</form>
+			</div>
+		</div>
+		
+		<div id="bookInventory">
+			<h1>Book Inventory</h1>
+		    <table id="bookTable" class="tables">
+		        <thead>
+		            <tr>
+		                <th>Book Name</th>
+		                <th>Author</th>
+		                <th>Genre</th>
+		                <th>Seller</th>
+		                <th>Price</th>
+		            </tr>
+		        </thead>
+		        <tbody></tbody>
+		    </table>
+		</div>
+	    		
 	</div>
 
 	<script src="AdminScript.js"></script>
