@@ -13,6 +13,4 @@ public interface UserService {
 	
 	 User registerUser(User user);
 	 User authenticateUser(String username, String password);
-	 List<Seller> getUserByUserType(Roles role);
-	 String updateVerificationStatus(String sellerName, Long sellerId);
 }
