@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.library.management.domain.Book;
 import com.library.management.domain.Seller;
 import com.library.management.repository.BooksRepository;
 import com.library.management.repository.SellerRepository;
@@ -38,20 +40,25 @@ public class SellerServiceImpl implements SellerService {
 	
 	@Override
 	public void removeSeller(Long sellerId) {
+		//Delete Books uploaded by Seller and then delete the seller
+		Optional<Seller> sellerOptional = sellerRepository.findById(sellerId);
+		if (sellerOptional.isPresent()) {
+            Seller seller = sellerOptional.get();
+            String sellerName = seller.getSellerName();
+            
+            if (sellerName != null) {
+                List<Book> books = booksRepository.findBySeller(sellerName);
+                for (Book book : books) {
+                	booksRepository.delete(book);
+                }
+            }
+		}
 		sellerRepository.deleteById(sellerId);
 	}
 	
 	@Override
 	public void updateSeller(Long sellerId, VerificationStatus status, String verifiedBy, Boolean addedByAdmin) {
 		var updateRecord = sellerRepository.getReferenceById(sellerId);
-		// TO DO: Remove book reference for the seller
-//		Optional<Seller> sellerOptional = sellerRepository.findById(sellerId);
-//		if (sellerOptional.isPresent()) {
-//            Seller seller = sellerOptional.get();
-//            String sellerName = seller.getSellerName();
-//            
-//            booksRepository.deleteAllById(sellerName);
-//		}
 		updateRecord.setVerificationStatus(status);
 		updateRecord.setVerifiedBy(verifiedBy);
 		updateRecord.setAddedByAdmin(addedByAdmin);

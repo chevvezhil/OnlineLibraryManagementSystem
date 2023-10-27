@@ -1,6 +1,7 @@
 package com.library.management.service.impl;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,8 @@ import com.library.management.domain.Book;
 import com.library.management.repository.BooksRepository;
 import com.library.management.service.BooksService;
 import com.library.management.service.SearchService;
-import com.library.management.utils.ProjectUtils;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class BooksServiceImpl implements BooksService {
@@ -55,6 +57,25 @@ public class BooksServiceImpl implements BooksService {
 	public List<Book> getAllBooks() {
 		return bookRepository.findAll();
 		// return InMemoryBookStorage.getAllBooks();
+	}
+	
+	
+	@Transactional
+    public List<Book> getBooksBySeller(String sellerName) {
+        if (sellerName != null) {
+            return bookRepository.findBySeller(sellerName);
+        }
+        return Collections.emptyList();
+    }
+	
+	public void updateBookPrice(Long bookId, double price) {
+		var updateRecord = bookRepository.getReferenceById(bookId.toString());
+		updateRecord.setPrice(price);
+		bookRepository.save(updateRecord);
+	}
+	
+	public void deleteBook(Long bookId) {
+		bookRepository.deleteById(bookId.toString());
 	}
 
 }
