@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.library.management.domain.Book;
+import com.library.management.domain.Sales;
+import com.library.management.domain.Seller;
 import com.library.management.service.BooksService;
+import com.library.management.service.SalesService;
+import com.library.management.service.SellerService;
 
 @RestController
 @RequestMapping("/api/seller")
@@ -25,6 +29,12 @@ public class SellerController {
 	
 	@Autowired
 	private BooksService bookService;
+	
+	@Autowired
+	private SellerService sellerService;
+	
+	@Autowired
+	private SalesService salesService;
 	
 	@PostMapping("/uploadBook")
 	@ResponseBody
@@ -72,5 +82,28 @@ public class SellerController {
 	public ResponseEntity<?> deleteBook(@RequestBody Book book) {
 		bookService.deleteBook(book.getBookId());
 		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	@GetMapping("/sales/{sellerName}")
+	public ResponseEntity<?> getSalesInfo(@PathVariable String sellerName) {
+		Seller seller = sellerService.getSellerByName(sellerName);
+		Long sellerId = seller.getSellerId();
+		
+		List<Sales> sales = salesService.retriveSalesForSeller(sellerId);
+		
+		for(Sales sale : sales) {
+			System.out.println("Sale id " + sale.getSaleId());
+			System.out.println(sale.getSeller().getSellerName());
+			
+			System.out.println("Books  " + sale.getBook().getBookname());
+		 }
+		
+		 if (sales.isEmpty()) {
+	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        } else {
+	            return new ResponseEntity<>(sales, HttpStatus.OK);
+	       }
+		 
+		 
 	}
 }

@@ -47,4 +47,8 @@ public class SalesServiceImplementation implements SalesService{
 		
 		return sale;
 	}
+	
+	public List<Sales> retriveSalesForSeller(Long sellerId){
+		return salesRepository.findSalesBySellerId(sellerId);
+	}
 }
