@@ -1,126 +1,383 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Seller Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+      }
 
-<head>
-	<title>Seller Page</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f5f5f5;
-			margin: 0;
-			padding: 0;
-		}
+      .container {
+        text-align: center;
+      }
 
-		h1 {
-			text-align: center;
-			padding: 20px;
-			background-color: #3498db;
-			color: #ffffff;
-		}
+      h1 {
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 20px;
+      }
 
-		.container {
-			max-width: 500px;
-			margin: 0 auto;
-			background-color: #ffffff;
-			padding: 20px;
-			border-radius: 5px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
+      label {
+        font-weight: bold;
+      }
 
-		label {
-			font-weight: bold;
-		}
+      .tables {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
 
-		input[type="text"],
-		input[type="number"],
-		input[type="file"] {
-			width: 100%;
-			padding: 10px;
-			margin-bottom: 15px;
-			border: 1px solid #ccc;
-			border-radius: 3px;
-		}
+      .tables td,
+      .tables th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
 
-		input[type="file"] {
-			cursor: pointer;
-		}
+      .tables tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-		button[type="submit"] {
-			background-color: #3498db;
-			color: #ffffff;
-			border: none;
-			padding: 10px 20px;
-			border-radius: 3px;
-			cursor: pointer;
-		}
+      .tables tr:hover {
+        background-color: #ddd;
+      }
 
-		button[type="submit"]:hover {
-			background-color: #2980b9;
-		}
+      .tables th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: #1a73d2;
+        color: white;
+      }
 
-		#result-message {
-			text-align: center;
-			margin-top: 15px;
-		}
-	</style>
-</head>
+      input[type="text"],
+      input[type="number"],
+      input[type="file"] {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      
+      .uploadBooks {
+		  width: 100%;
+	  }
 
-<body>
-	<h1>Seller Page</h1>
-	<div class="container">
-		<form id="book-form" enctype="multipart/form-data">
-			<label for="book-name">Book Name:</label>
-			<input type="text" id="bookname" name="bookname" required><br>
+      input[type="file"] {
+        cursor: pointer;
+      }
 
-			<label for="book-author">Author:</label>
-			<input type="text" id="author" name="author" required><br>
+      button[type="submit"] {
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
 
-			<label for="book-genre">Genre:</label>
-			<input type="text" id="genre" name="genre" required><br>
+      button[type="submit"]:hover {
+        background-color: #2980b9;
+      }
 
-			<label for="book-price">Price:</label>
-			<input type="number" id="price" name="price" required><br>
+      /* Add a black background color to the top navigation */
+      .topnav {
+        background-color: #333;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+      }
 
-			<label for="pdf-file">Upload PDF:</label>
-			<input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required><br>
+      /* Style the links inside the navigation bar */
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        width: 50%;
+      }
 
-			<button type="submit" id="upload-button">Upload Book</button>
-		</form>
+      /* Change the color of links on hover */
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
 
-		<div id="result-message"></div>
-	</div>
+      /* Add a color to the active/current link */
+      .topnav a.active {
+        background-color: #1a73d2;
+        color: white;
+      }
+      #result-message {
+        text-align: center;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
 
-	<script>
-		const baseUrl = 'http://localhost:8080/library';
-		document.getElementById('book-form').addEventListener('submit', function (e) {
-			e.preventDefault();
+  <body>
+    <div class="container">
+      <h1>Online Library Management System</h1>
+      <div class="topnav">
+        <a class="active" href="#uploadBook">Upload Books</a>
+        <a href="#viewBooks">Book Inventory</a>
+        <a href="#trackSales">Track Sales</a>
+      </div>
 
-			const form = document.getElementById("book-form");
+      <div id="uploadBook">
+        <h1>Upload Book</h1>
+        <form id="book-form" enctype="multipart/form-data">
+          <label for="book-name">Book Name:</label>
+          <input class="uploadBooks" type="text" id="bookname" name="bookname" required /><br />
 
-			const formData = new FormData(form);
-			formData.append("seller", localStorage.getItem("username"));
-			console.log("book data ", formData);
+          <label for="book-author">Author:</label>
+          <input class="uploadBooks" type="text" id="author" name="author" required /><br />
 
+          <label for="book-genre">Genre:</label>
+          <input class="uploadBooks" type="text" id="genre" name="genre" required /><br />
 
-			fetch(`${baseUrl}/uploadBook`, {
-				method: 'POST',
-				body: formData
-			})
-				.then(response => {
-					if (response.ok) {
-						console.log("success ");
-						document.getElementById('result-message').innerHTML = '<span style="color: green;">Book uploaded successfully.</span>';
-						document.getElementById('book-form').reset();
-					} else {
-						document.getElementById('result-message').innerHTML = '<span style="color: red;">Error uploading book.</span>';
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					document.getElementById('result-message').innerHTML = '<span style="color: red;">An error occurred.</span>';
-				});
-		});
-	</script>
-</body>
+          <label for="book-price">Price:</label>
+          <input class="uploadBooks" type="number" id="price" name="price" required /><br />
 
+          <label for="pdf-file">Upload PDF:</label>
+          <input
+          	class="uploadBooks"
+            type="file"
+            id="pdfFile"
+            name="pdfFile"
+            accept=".pdf"
+            required
+          /><br />
+
+          <button type="submit" id="upload-button">Upload Book</button>
+        </form>
+
+        <div id="result-message"></div>
+      </div>
+
+      <div id="viewBooks">
+        <h1>Book Inventory</h1>
+        <table id="bookTable" class="tables">
+          <thead>
+            <tr>
+              <th>Book Name</th>
+              <th>Author</th>
+              <th>Genre</th>
+              <th>Price</th>
+              <th>Update Price</th>
+              <th>Remove Book</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="trackSales">
+        <h1>Sales Inventory</h1>
+        yet to add
+      </div>
+    </div>
+
+    <script>
+      const baseUrl = "http://localhost:8080/api/seller";
+      document
+        .getElementById("book-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const form = document.getElementById("book-form");
+
+          const formData = new FormData(form);
+          formData.append("seller", localStorage.getItem("username"));
+          console.log("book data ", formData);
+
+          fetch(`${baseUrl}/uploadBook`, {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("success ");
+                alert("Book uploaded successfully.");
+                document.getElementById("book-form").reset();
+                location.reload();
+              } else {
+                document.getElementById("result-message").innerHTML =
+                  '<span style="color: red;"></span>';
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              document.getElementById("result-message").innerHTML =
+                '<span style="color: red;">An error occurred.</span>';
+            });
+        });
+
+      const username = localStorage.getItem("username");
+      //Get book inventory for seller
+      function getAllSellerBooks() {
+        fetch(`${baseUrl}/books/${username}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Unable to fetch book details");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            displayBooks(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function displayBooks(bookArray) {
+        const bookTable = document.getElementById("bookTable");
+        const tbody = bookTable.querySelector("tbody");
+
+        // Clear existing table rows
+        tbody.innerHTML = "";
+
+        // Populate the table with data
+        bookArray.forEach((book) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+		        <td>${book.bookname}</td>
+		        <td>${book.author}</td>
+		        <td>${book.genre}</td>
+		        <td>
+					<form id="updateForm">
+                    	<input type="number" name="price" value=${book.price}>
+                	</form>
+				</td>
+		        <td>
+					<button
+                    		type="button" 
+                    		id="updateBookPrice" 
+                    		onclick="updateBookPrice(${book.bookId})"
+                    >Update Price</button>
+				</td>
+				<td>					
+					<button
+                    		type="button" 
+                    		id="deleteBook" 
+                    		onclick="deleteBook(${book.bookId})"
+                    >Delete Book</button>
+				</td>
+		    `;
+          tbody.appendChild(row);
+        });
+      }
+
+    // Update Book Price
+	function updateBookPrice(bookId) {
+	  const inputForm = document.getElementById(`updateForm`);
+      const formData = new FormData(inputForm);
+	  const newPrice = formData.get('price');
+		
+	  const request = {
+	    bookId: bookId,
+	    price: newPrice
+	  };
+	
+	  fetch("api/seller/updateBookPrice", {
+	    method: "POST",
+	    headers: {
+	      "Content-Type": "application/json",
+	    },
+	    body: JSON.stringify(request),
+	  })
+	    .then((response) => {
+	      if (!response.ok) {
+			alert("Failed to update. Please try again");
+	        throw new Error("Failed to update. Please try again");
+	      }
+	      location.reload();
+	      return response.text();
+	    })
+	    .catch((error) => {
+	      // Handle error
+	      console.error("Error:", error);
+	    });
+	}
+	
+	// Remove book
+	function deleteBook(bookId) {
+	  const request = {
+	    bookId: bookId
+	  };
+	
+	  fetch("api/seller/deleteBook", {
+	    method: "POST",
+	    headers: {
+	      "Content-Type": "application/json",
+	    },
+	    body: JSON.stringify(request),
+	  })
+	    .then((response) => {
+	      if (!response.ok) {
+			alert("Failed to remove Book");
+	        throw new Error("Unable to remove Book");
+	      }
+	      location.reload();
+	      return response.text();
+	    })
+	    .catch((error) => {
+	      // Handle error
+	      console.error("Error:", error);
+	    });
+	}
+
+      const uploadBookSection = document.getElementById("uploadBook");
+      const viewBooksSection = document.getElementById("viewBooks");
+      const trackSalesSection = document.getElementById("trackSales");
+
+      // Function to show a specific section and hide the others
+      function showSection(sectionId) {
+        uploadBookSection.style.display = "none";
+        viewBooksSection.style.display = "none";
+        trackSalesSection.style.display = "none";
+        document.getElementById(sectionId).style.display = "block";
+      }
+
+      // Add event listeners to the navigation links
+      document.querySelectorAll(".topnav a").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault(); // Prevent the default link behavior
+          showSection(link.getAttribute("href").substring(1)); // Extract the section ID and show it
+        });
+      });
+
+      // Initially, show the default section
+      showSection("uploadBook");
+
+      //Active Navbar
+      document.addEventListener("DOMContentLoaded", function () {
+        const navbarLinks = document.querySelectorAll(".topnav a");
+
+        navbarLinks.forEach((link) => {
+          link.addEventListener("click", function (event) {
+            // Remove the 'active' class from all links
+            navbarLinks.forEach((link) => link.classList.remove("active"));
+
+            // Add the 'active' class to the clicked link
+            this.classList.add("active");
+          });
+        });
+      });
+
+      function initializePage() {
+        getAllSellerBooks();
+      }
+
+      document.addEventListener("DOMContentLoaded", initializePage);
+    </script>
+  </body>
 </html>

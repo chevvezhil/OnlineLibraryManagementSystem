@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const addSellerForm = document.getElementById('addseller-form');
+	
+	const sellerDetailsSection = document.getElementById('sellerDetails');
+	const addSellerSection = document.getElementById('addSeller');
+	const bookInventorySection = document.getElementById('bookInventory');
 
 	addSellerForm.addEventListener('submit', function(e) {
 		e.preventDefault();
@@ -7,6 +11,26 @@ document.addEventListener('DOMContentLoaded', function() {
 		const password = document.getElementById('seller-password').value;
 		addSeller(email, password);
 	});
+	
+	// Function to show a specific section and hide the others
+    function showSection(sectionId) {
+        sellerDetailsSection.style.display = 'none';
+        addSellerSection.style.display = 'none';
+        bookInventorySection.style.display = 'none';
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Add event listeners to the navigation links
+    document.querySelectorAll('.topnav a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent the default link behavior
+            showSection(link.getAttribute('href').substring(1)); // Extract the section ID and show it
+        });
+    });
+
+    // Initially, show the default section
+    showSection('sellerDetails');
+	
 });
 
 
