@@ -310,6 +310,8 @@
 				books: cartData,
 				buyerId: localStorage.getItem("username")
 			}
+			console.log("cart Data" , cartData);
+			console.log("order " , order);
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
 					method: 'POST',

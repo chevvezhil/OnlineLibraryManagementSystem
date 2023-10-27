@@ -57,4 +57,9 @@ public class SellerServiceImpl implements SellerService {
 		updateRecord.setAddedByAdmin(addedByAdmin);
 		sellerRepository.save(updateRecord);
 	}
+	
+	@Override
+	 public Seller getSellerByName(String sellerName) {
+	        return sellerRepository.findBySellerName(sellerName);
+	    }
 }
