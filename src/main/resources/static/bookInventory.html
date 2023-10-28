@@ -195,8 +195,79 @@
 
 		.popup .content {
 			max-height: 30%;
-    overflow: auto;
-    font-size: 20px;
+			overflow: auto;
+			font-size: 20px;
+		}
+
+		/* CSS for Payment Method Popup */
+		#payment-popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			width: 400px;
+			height: auto;
+			z-index: 1001;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			text-align: center;
+		}
+
+		#payment-popup a.close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 20px;
+			font-weight: bold;
+			text-decoration: none;
+			color: #333;
+			cursor: pointer;
+		}
+
+		#payment-popup a.close:hover {
+			color: #06D85F;
+		}
+
+		#payment-popup .content {
+			max-height: 30%;
+			overflow: auto;
+			font-size: 20px;
+		}
+
+		#payment-form {
+			margin-top: 20px;
+		}
+
+		.payment-option {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+
+		.payment-option input[type="radio"] {
+			margin-right: 10px;
+		}
+
+		.payment-option label {
+			font-size: 18px;
+			cursor: pointer;
+		}
+
+		#proceed-payment-button {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			padding: 10px 15px;
+			margin-top: 20px;
+			cursor: pointer;
+		}
+
+		#proceed-payment-button:hover {
+			background-color: #0056b3;
 		}
 	</style>
 </head>
@@ -223,7 +294,7 @@
 		<h2>Your Cart</h2>
 		<ul id="cart-items"></ul>
 		<p>Total Amount: <span id="total-amount">0</span></p>
-		<button id="proceed-button">Proceed to Buy</button>
+		<button id="proceed-button">Proceed to Payment</button>
 	</div>
 
 	<div id="loader">
@@ -236,6 +307,29 @@
 		<div class="content" id="popupContent">
 		</div>
 	</div>
+
+	<div id="payment-popup" class="popup">
+		<a class="close" href="#">&times;</a>
+		<div class="content">
+			<h3>Select Payment Method</h3>
+			<form id="payment-form">
+				<div class="payment-option">
+					<input type="radio" id="netbanking" name="paymentMethod" value="netbanking">
+					<label for="netbanking">Netbanking</label>
+				</div>
+				<div class="payment-option">
+					<input type="radio" id="upi" name="paymentMethod" value="upi">
+					<label for="upi">UPI</label>
+				</div>
+				<div class="payment-option">
+					<input type="radio" id="cashondelivery" name="paymentMethod" value="cashondelivery">
+					<label for="cashondelivery">Cash on Delivery</label>
+				</div>
+				<button id="proceed-payment-button">Proceed to Buy</button>
+			</form>
+		</div>
+	</div>
+
 
 
 
@@ -352,13 +446,34 @@
 			cart.textContent = `Cart (${cartData.length})`;
 		}
 
+		const paymentPopup = document.getElementById("payment-popup");
+		const paymentForm = document.getElementById("payment-form");
+		const proceedPaymentButton = document.getElementById("proceed-payment-button");
+		
+		console.log(proceedPaymentButton);
+
 		proceedButton.addEventListener("click", () => {
+			if (cartData.length > 0) {
+				cartOverlay.style.display = "none";
+				cartPopup.style.display = "none";
+				paymentPopup.style.visibility = "visible";
+			}
+		});
+
+		proceedPaymentButton.addEventListener("click", () => {
+
+			const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+
+
 			const order = {
 				books: cartData,
-				buyerId: localStorage.getItem("username")
+				buyerId: localStorage.getItem("username"),
+				paymentMethod: selectedPaymentMethod.value
 			}
 			console.log("cart Data", cartData);
 			console.log("order ", order);
+			
+			
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
 					method: 'POST',
@@ -402,6 +517,8 @@
 				updateCartUI();
 				cartOverlay.style.display = "none";
 				cartPopup.style.display = "none";
+				paymentPopup.style.display ="none";
+				
 			}
 		});
 
@@ -437,6 +554,8 @@
 		const popup = document.querySelector(".popup");
 		const popupContent = document.querySelector(".popup .content");
 		const closePopupButton = document.querySelector(".popup .close");
+		const paymentCloseButton = document.querySelector("#payment-popup .close");
+
 
 		// Show the popup with a message
 		function showPopup(message, type) {
@@ -449,7 +568,10 @@
 		closePopupButton.addEventListener("click", function () {
 			popup.style.visibility = "hidden";
 		});
-
+		
+		paymentCloseButton.addEventListener("click", function () {
+			paymentPopup.style.visibility = "hidden";
+		});
 
 
 	</script>

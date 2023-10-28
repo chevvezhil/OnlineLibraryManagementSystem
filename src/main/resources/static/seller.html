@@ -214,7 +214,8 @@
 					<tr>
 						<th>Book Name</th>
 						<th>Price</th>
-						<th>Sale Date</th>
+						<th>Order Status</th>
+						<th>Purchased Date</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
@@ -503,6 +504,7 @@
 			// Populate the table with sales data
 			salesData.forEach((sale) => {
 				const book = sale.book;
+				const order = sale.order;
 				if (book) {
 					// Calculate the total amount
 					const formattedDate = formatSaleDate(sale.saleDate);
@@ -512,6 +514,7 @@
 					row.innerHTML = `
               <td>${book.bookname}</td>
               <td>${book.price}</td>
+              <td>${order.orderStatus}</td>
               <td>${formattedDate}</td>
             `;
 					tbody.appendChild(row);
