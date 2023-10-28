@@ -13,4 +13,5 @@ public interface SellerService {
 	 void updateVerificationStatus(Long sellerId, String verifiedBy);
 	 void removeSeller(Long sellerId);
 	 void updateSeller(Long sellerId, VerificationStatus status, String verifiedBy, Boolean addedByAdmin);
+	 public Seller getSellerByName(String sellerName);
 }

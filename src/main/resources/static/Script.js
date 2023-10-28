@@ -36,7 +36,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+const popup = document.querySelector(".popup");
+const popupContent = document.querySelector(".popup .content");
+const closePopupButton = document.querySelector(".popup .close");
 
+const loginForm = document.getElementById('login-form');
+const signupForm = document.getElementById('signup-form');
+
+// Show the popup with a message
+function showPopup(message) {
+	popupContent.innerText = message;
+	popup.style.visibility = "visible";
+
+}
+
+// Close the popup
+closePopupButton.addEventListener("click", function() {
+	popup.style.visibility = "hidden";
+});
 
 // Base URL for the API
 const baseUrl = 'http://localhost:8080/api/users';
@@ -55,24 +72,19 @@ function registerUser(username, password, roles) {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(userData)
+	}).then(response => {
+		if (!response.ok) {
+			response.text() // Call the text() function to retrieve the response text
+				.then(errorMessage => {
+					showPopup(errorMessage);
+				});
+		} else {
+			showPopup("Registration Successful. Please login to proceed further");
+			loginForm.style.display = 'block';
+			signupForm.style.display = 'none';
+		}
 	})
-		.then(response => {
-			if (response.ok) {
-				return response.json(); // Assuming the server sends a JSON response
-			}
-			throw new Error('Registration failed');
-		})
-		.then(data => {
-			// Registration successful
-			console.log('Registration successful:', data);
-			alert("Registration Successful. Please login to proceed further");
-		})
-		.catch(error => {
-			// Registration error
-			console.error('Registration error:', error);
-			// Display an error message to the user or show a popup
-			alert('Registration failed. User name may already be taken.');
-		});
+
 }
 
 
@@ -92,28 +104,33 @@ function loginUser(username, password) {
 	})
 		.then(response => {
 			if (!response.ok) {
-				alert("Login Failed");
-				throw new Error('Login failed');
+				response.text()
+					.then(errorMessage => {
+						showPopup(errorMessage);
+					});
+			} else {
+				response.text()
+					.then(data => {
+						console.log("data ", data);
+						if (data === 'seller') {
+							window.location.href = '/seller.html';
+						} else if (data === 'buyer') {
+							window.location.href = '/bookInventory.html';
+						} else if (data === 'admin') {
+							window.location.href = '/admin-page.html';
+						}
+						console.log('Login successful:', data);
+					})
+					.catch(error => {
+						console.error('Error parsing response data:', error);
+					});
 			}
-			return response.text();
-		})
-		.then(data => {
-			console.log("data ", data);
-			if (data === 'seller') {
-				window.location.href = '/seller.html';
-			} else if (data === 'buyer') {
-				// Redirect to the book inventory page
-				window.location.href = '/bookInventory.html';
-			} else if (data === 'admin') {
-				// Redirect to the admin page
-				window.location.href = '/admin-page.html';
-			}
-
-			console.log('Login successful:', data);
 		})
 		.catch(error => {
 			// Handle login error
+			showPopup("Login Failed ");
 			console.error('Login error:', error);
 		});
 }
+
 

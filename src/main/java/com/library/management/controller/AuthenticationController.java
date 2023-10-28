@@ -19,16 +19,26 @@ public class AuthenticationController {
 	private UserService userService;
 
 	@PostMapping("/register")
-	public @ResponseBody User addNewUser(@RequestBody User user) {
-		return userService.registerUser(user);
+	@ResponseBody
+	public ResponseEntity<String> addNewUser(@RequestBody User user) {
+		System.out.println("usr info " + user.getUserName());
+		 if(userService.registerUser(user))
+			 return ResponseEntity.ok("User registered successfully");
+		 else
+			 return ResponseEntity.badRequest().body("Username already exists");
 	}
 
 	@PostMapping("/login")
 	@ResponseBody
 	public ResponseEntity<String> loginUser(@RequestBody User user) {
-
+		
 		User userInfo = userService.authenticateUser(user.getUserName(), user.getPassword());
+
+		if(userInfo.getUserRole().equalsIgnoreCase("seller") && !userService.isSellerVerified(user.getUserName())) 
+				return ResponseEntity.badRequest().body("You are not verified. Please contact admin");
+			
 		return ResponseEntity.ok(userInfo.getUserRole());
+		
 	}
 
 }

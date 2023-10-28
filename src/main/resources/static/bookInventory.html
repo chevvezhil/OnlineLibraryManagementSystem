@@ -164,6 +164,40 @@
 				transform: rotate(360deg);
 			}
 		}
+
+		.popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			padding: 100px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+			z-index: 1000;
+			visibility: hidden;
+		}
+
+		.popup .close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 20px;
+			font-weight: bold;
+			text-decoration: none;
+			color: #333;
+			cursor: pointer;
+		}
+
+		.popup .close:hover {
+			color: #06D85F;
+		}
+
+		.popup .content {
+			max-height: 30%;
+    overflow: auto;
+    font-size: 20px;
+		}
 	</style>
 </head>
 
@@ -196,6 +230,15 @@
 		<div class="spinner"></div>
 	</div>
 
+
+	<div class="popup overlay">
+		<a class="close" href="#">&times;</a>
+		<div class="content" id="popupContent">
+		</div>
+	</div>
+
+
+
 	<script>
 		hideLoader();
 
@@ -222,25 +265,32 @@
 			const keyword = searchBox.value.trim();
 			const criteria = filter.value.trim();
 
-			const encodedCriteria = encodeURIComponent(criteria);
-			const encodedKeyword = encodeURIComponent(keyword);
+			if (keyword == "") {
+				getAllBooks();
+			} else {
 
-			showLoader();
 
-			fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
-				.then(response => response.json())
-				.then(data => {
-					if (data.length === 0) {
-						alert("No Books Available");
-					} else {
-						displayBooks(data);
-					}
-					hideLoader(); // Hide the loader after fetching data.
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					hideLoader(); // Hide the loader if there's an error.
-				});
+				const encodedCriteria = encodeURIComponent(criteria);
+				const encodedKeyword = encodeURIComponent(keyword);
+
+				showLoader();
+
+				fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
+					.then(response => response.json())
+					.then(data => {
+						if (data.length === 0) {
+							showPopup("No Books Available", "error");
+						} else {
+							displayBooks(data);
+						}
+						hideLoader(); // Hide the loader after fetching data.
+					})
+					.catch(error => {
+						showPopup("something went wrong", "error");
+						console.error('Error:', error);
+						hideLoader(); // Hide the loader if there's an error.
+					});
+			}
 		}
 
 		function getAllBooks() {
@@ -252,6 +302,7 @@
 					hideLoader(); // Hide the loader after fetching data.
 				})
 				.catch(error => {
+					showPopup("something went wrong", "error");
 					console.error('Error:', error);
 					hideLoader(); // Hide the loader if there's an error.
 				});
@@ -281,6 +332,8 @@
 			const book = books[index];
 			cartData.push(book);
 			updateCartUI();
+			console.log("book added");
+			showPopup("Book Added to the cart.", "success");
 		}
 
 		function updateCartUI() {
@@ -302,8 +355,10 @@
 		proceedButton.addEventListener("click", () => {
 			const order = {
 				books: cartData,
-				buyerId :localStorage.getItem("username")
+				buyerId: localStorage.getItem("username")
 			}
+			console.log("cart Data", cartData);
+			console.log("order ", order);
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
 					method: 'POST',
@@ -314,7 +369,7 @@
 				})
 					.then((response) => {
 						if (response.ok) {
-							return response.text(); 
+							return response.text();
 						} else {
 							console.error('Error downloading books');
 						}
@@ -336,8 +391,8 @@
 						document.body.appendChild(a);
 						a.click();
 						document.body.removeChild(a);
-						
-						alert("Your Order has been delivered :)");
+
+						showPopup("Your Order Delivered Succesfully!!", "success");
 					})
 					.catch((error) => {
 						console.error('Error:', error);
@@ -378,6 +433,23 @@
 				cartPopup.style.display = "none";
 			}
 		});
+
+		const popup = document.querySelector(".popup");
+		const popupContent = document.querySelector(".popup .content");
+		const closePopupButton = document.querySelector(".popup .close");
+
+		// Show the popup with a message
+		function showPopup(message, type) {
+			popupContent.innerText = message;
+			popup.style.visibility = "visible";
+
+		}
+
+		// Close the popup
+		closePopupButton.addEventListener("click", function () {
+			popup.style.visibility = "hidden";
+		});
+
 
 
 	</script>

@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private SellerRepository sellerRepository;
 
@@ -24,19 +24,21 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public User registerUser(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		var response = userRepository.save(user);
-		
-		if(user.getUserRole().equals("seller"))
-		{
-			var seller = new Seller(user.getUserId(), user.getUserName(), VerificationStatus.REQUESTED);
-			sellerRepository.save(seller);
-			System.out.println("Seller added to seller table");
+	public boolean registerUser(User user) {
+
+		if (userRepository.existsByUserName(user.getUserName())) {
+			return false;
 		}
 
-		return response;
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		 userRepository.save(user);
+
+		if (user.getUserRole().equals("seller")) {
+			var seller = new Seller(user.getUserId(), user.getUserName(), VerificationStatus.REQUESTED);
+			sellerRepository.save(seller);
+		}
+
+		return true;
 	}
 
 	@Override
@@ -46,6 +48,21 @@ public class UserServiceImpl implements UserService {
 		if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 			return user;
 		}
-		return null; 
+		return null;
+	}
+	
+	@Override
+	public boolean isSellerVerified(String username) {
+		Seller seller = sellerRepository.findBySellerName(username);
+		if(seller.getVerificationStatus() == VerificationStatus.VERIFIED) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public void removeUser(Long userId) {
+		userRepository.deleteById(userId);
 	}
 }

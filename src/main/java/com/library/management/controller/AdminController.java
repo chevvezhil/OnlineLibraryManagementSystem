@@ -47,6 +47,7 @@ public class AdminController {
 	@ResponseBody
 	public ResponseEntity<?> removeSeller(@RequestBody Seller seller) {
 		sellerService.removeSeller(seller.getSellerId());
+		userService.removeUser(seller.getSellerId());
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	

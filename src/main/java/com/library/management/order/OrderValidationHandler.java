@@ -25,7 +25,7 @@ public class OrderValidationHandler extends OrderHandler {
 			return "Book Id shouldn't be null";
 		}else {
 			if (nextHandler != null) {
-				order.setOrderStatus(OrderStatus.FAILED);
+				order.setOrderStatus(OrderStatus.ORDER_VALIDATED);
 				return nextHandler.processOrder(order);
 			}
 		}

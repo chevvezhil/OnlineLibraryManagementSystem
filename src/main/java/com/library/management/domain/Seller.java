@@ -1,5 +1,6 @@
 package com.library.management.domain;
 
+import com.library.management.order.Observer;
 import com.library.management.utils.VerificationStatus;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "seller")
-public class Seller {
+public class Seller implements Observer{
 	
 	@Id
 	@Column(name = "sellerId")
@@ -40,5 +41,12 @@ public class Seller {
 		this.sellerId = sellerId;
 		this.sellerName = sellerName;
 		this.verificationStatus = verificationStatus;
+	}
+
+	@Override
+	public void update(Order order) {
+		for(Book book : order.getBooks()) {
+			System.out.println("Book Name " + book.getBookname() + " Seller :" + book.getSeller() + " Order Status " + order.getOrderStatus());
+		}
 	}
 }
