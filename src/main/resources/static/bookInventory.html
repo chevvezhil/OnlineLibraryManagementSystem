@@ -1,458 +1,471 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bookstore</title>
+    <style>
+      /* CSS styles go here */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
+      }
 
-<head>
-	<meta charset="UTF-8">
-	<title>Bookstore</title>
-	<style>
-		/* CSS styles go here */
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f1f1f1;
-		}
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1a73d2;
+        color: #fff;
+        padding: 10px;
+      }
 
-		header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background-color: #1a73d2;
-			color: #fff;
-			padding: 10px;
-		}
+      #search-container {
+        display: flex;
+        align-items: center;
+        width: 80%;
+      }
 
-		#search-container {
-			display: flex;
-			align-items: center;
-		}
+      #search-box {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 25%;
+      }
 
-		#search-box {
-			padding: 10px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			font-size: 16px;
-		}
+      #filter {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        background: #fff;
+        color: #333;
+        margin-left: 10px;
+      }
 
-		#filter {
-			padding: 10px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			font-size: 16px;
-			background: #fff;
-			color: #333;
-			margin-left: 10px;
-		}
+      .searchButton {
+        background-color: #ee5656;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 16px;
+      }
 
-		#search-button {
-			background-color: #ee5656;
-			color: #fff;
-			border: none;
-			border-radius: 5px;
-			padding: 15px 15px;
-			margin-left: 10px;
-			cursor: pointer;
-		}
+      .clearButton {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
 
-		#book-list {
-			display: flex;
-			flex-wrap: wrap;
-		}
+      #book-list {
+        display: flex;
+        flex-wrap: wrap;
+      }
 
-		.book {
-			border: 1px solid #ddd;
-			margin: 10px;
-			padding: 10px;
-			width: 200px;
-			border-radius: 5px;
-		}
+      .book {
+        border: 1px solid #ddd;
+        margin: 10px;
+        padding: 10px;
+        width: 200px;
+        border-radius: 5px;
+      }
 
-		#cart {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			padding: 20px;
-			cursor: pointer;
-		}
+      #cart {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 20px;
+        cursor: pointer;
+      }
 
-		#cart-overlay {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.6);
-			z-index: 1000;
-		}
+      #cart-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+      }
 
-		#cart-popup {
-			display: none;
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			background: #fff;
-			padding: 20px;
-			border: 1px solid #ddd;
-			border-radius: 10px;
-			width: 400px;
-			height: 400px;
-			z-index: 1001;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-		}
+      #cart-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 400px;
+        height: 400px;
+        z-index: 1001;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
 
-		#cart-items {
-			list-style-type: none;
-			padding: 0;
-		}
+      #cart-items {
+        list-style-type: none;
+        padding: 0;
+      }
 
-		#cart-items li {
-			margin: 10px 0;
-			display: flex;
-			justify-content: space-between;
-		}
+      #cart-items li {
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+      }
 
-		#proceed-button {
-			background-color: #007bff;
-			color: #fff;
-			border: none;
-			border-radius: 5px;
-			padding: 10px 15px;
-			margin-top: 10px;
-			cursor: pointer;
-		}
+      #proceed-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin-top: 10px;
+        cursor: pointer;
+      }
 
-		#cartButton {
-			padding: 10px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			font-size: 16px;
-		}
+      #cartButton {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
 
-		#loader {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(255, 255, 255, 0.7);
-			/* Semi-transparent white background */
-			z-index: 1000;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
+      #loader {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.7);
+        /* Semi-transparent white background */
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-		.spinner {
-			border: 4px solid rgba(255, 255, 255, 0.3);
-			/* Light gray border */
-			border-top: 4px solid #007bff;
-			/* Blue border (adjust color as needed) */
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			animation: spin 1s linear infinite;
-			/* Add a spinning animation */
-		}
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        /* Light gray border */
+        border-top: 4px solid #007bff;
+        /* Blue border (adjust color as needed) */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        /* Add a spinning animation */
+      }
 
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
 
-			100% {
-				transform: rotate(360deg);
-			}
-		}
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-		.popup {
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			background: #fff;
-			padding: 100px;
-			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-			border-radius: 5px;
-			z-index: 1000;
-			visibility: hidden;
-		}
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 100px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        z-index: 1000;
+        visibility: hidden;
+      }
 
-		.popup .close {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			font-size: 20px;
-			font-weight: bold;
-			text-decoration: none;
-			color: #333;
-			cursor: pointer;
-		}
+      .popup .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+        cursor: pointer;
+      }
 
-		.popup .close:hover {
-			color: #06D85F;
-		}
+      .popup .close:hover {
+        color: #06d85f;
+      }
 
-		.popup .content {
-			max-height: 30%;
-    overflow: auto;
-    font-size: 20px;
-		}
-	</style>
-</head>
+      .popup .content {
+        max-height: 30%;
+        overflow: auto;
+        font-size: 20px;
+      }
+    </style>
+  </head>
 
-<body>
-	<header>
-		<div id="search-container">
-			<input type="text" id="search-box" placeholder="Search by Book, Author, Genre" />
-			<select id="filter">
-				<option value="book">Book</option>
-				<option value="author">Author</option>
-				<option value="genre">Genre</option>
-			</select>
-			<button id="search-button">Search</button>
-		</div>
-		<div id="cart">Cart (0)</div>
-	</header>
+  <body>
+    <header>
+      <div id="search-container">
+        <input
+          type="text"
+          id="search-box"
+          placeholder="Search by Book, Author, Genre"
+        />
+        <select id="filter">
+          <option value="book">Book</option>
+          <option value="author">Author</option>
+          <option value="genre">Genre</option>
+        </select>
+        <button class="searchButton" id="search-button">Search</button>
+        <button class="clearButton" id="clear-button">Clear Filter</button>
+      </div>
+      <div id="cart">Cart (0)</div>
+    </header>
 
-	<div id="book-list"></div>
+    <div id="book-list"></div>
 
-	<div id="cart-overlay"></div>
+    <div id="cart-overlay"></div>
 
-	<div id="cart-popup">
-		<h2>Your Cart</h2>
-		<ul id="cart-items"></ul>
-		<p>Total Amount: <span id="total-amount">0</span></p>
-		<button id="proceed-button">Proceed to Buy</button>
-	</div>
+    <div id="cart-popup">
+      <h2>Your Cart</h2>
+      <ul id="cart-items"></ul>
+      <p>Total Amount: <span id="total-amount">0</span></p>
+      <button id="proceed-button">Proceed to Buy</button>
+    </div>
 
-	<div id="loader">
-		<div class="spinner"></div>
-	</div>
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
 
+    <div class="popup overlay">
+      <a class="close" href="#">&times;</a>
+      <div class="content" id="popupContent"></div>
+    </div>
 
-	<div class="popup overlay">
-		<a class="close" href="#">&times;</a>
-		<div class="content" id="popupContent">
-		</div>
-	</div>
+    <script>
+      hideLoader();
 
+      const baseUrl = "http://localhost:8080/library";
 
+      const bookList = document.getElementById("book-list");
 
-	<script>
-		hideLoader();
+      const searchBox = document.getElementById("search-box");
+      const filter = document.getElementById("filter");
 
-		const baseUrl = 'http://localhost:8080/library';
+      const searchButton = document.getElementById("search-button");
+      const clearButton = document.getElementById("clear-button");
+      const cart = document.getElementById("cart");
+      const cartOverlay = document.getElementById("cart-overlay");
+      const cartPopup = document.getElementById("cart-popup");
+      const cartItems = document.getElementById("cart-items");
+      const totalAmount = document.getElementById("total-amount");
+      const proceedButton = document.getElementById("proceed-button");
 
-		const bookList = document.getElementById("book-list");
+      let cartData = [];
 
-		const searchBox = document.getElementById("search-box");
-		const filter = document.getElementById("filter");
+      searchButton.addEventListener("click", searchBook);
+      clearButton.addEventListener("click", clearFilter);
+      
+      function clearFilter() {
+		  getAllBooks();
+		  searchBox.value="";
+		  // Deselect all options in the select element
+		  for (var i = 0; i < filter.options.length; i++) {
+		    filter.options[i].selected = false;
+		  }
+	  }
 
-		const searchButton = document.getElementById("search-button");
-		const cart = document.getElementById("cart");
-		const cartOverlay = document.getElementById("cart-overlay");
-		const cartPopup = document.getElementById("cart-popup");
-		const cartItems = document.getElementById("cart-items");
-		const totalAmount = document.getElementById("total-amount");
-		const proceedButton = document.getElementById("proceed-button");
+      function searchBook() {
+        const keyword = searchBox.value.trim();
+        const criteria = filter.value.trim();
 
-		let cartData = [];
+        if (keyword == "") {
+          getAllBooks();
+        } else {
+          const encodedCriteria = encodeURIComponent(criteria);
+          const encodedKeyword = encodeURIComponent(keyword);
 
-		searchButton.addEventListener("click", searchBook);
+          showLoader();
 
-		function searchBook() {
-			const keyword = searchBox.value.trim();
-			const criteria = filter.value.trim();
+          fetch(
+            `http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.length === 0) {
+                showPopup("No Books Available", "error");
+              } else {
+                displayBooks(data);
+              }
+              hideLoader(); // Hide the loader after fetching data.
+            })
+            .catch((error) => {
+              showPopup("something went wrong", "error");
+              console.error("Error:", error);
+              hideLoader(); // Hide the loader if there's an error.
+            });
+        }
+      }
 
-			if (keyword == "") {
-				getAllBooks();
-			} else {
+      function getAllBooks() {
+        showLoader();
+        fetch(`${baseUrl}/getBooks`)
+          .then((response) => response.json())
+          .then((data) => {
+            displayBooks(data);
+            hideLoader(); // Hide the loader after fetching data.
+          })
+          .catch((error) => {
+            showPopup("something went wrong", "error");
+            console.error("Error:", error);
+            hideLoader(); // Hide the loader if there's an error.
+          });
+      }
 
+      let books = [];
 
-				const encodedCriteria = encodeURIComponent(criteria);
-				const encodedKeyword = encodeURIComponent(keyword);
-
-				showLoader();
-
-				fetch(`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`)
-					.then(response => response.json())
-					.then(data => {
-						if (data.length === 0) {
-							showPopup("No Books Available", "error");
-						} else {
-							displayBooks(data);
-						}
-						hideLoader(); // Hide the loader after fetching data.
-					})
-					.catch(error => {
-						showPopup("something went wrong", "error");
-						console.error('Error:', error);
-						hideLoader(); // Hide the loader if there's an error.
-					});
-			}
-		}
-
-		function getAllBooks() {
-			showLoader();
-			fetch(`${baseUrl}/getBooks`)
-				.then(response => response.json())
-				.then(data => {
-					displayBooks(data);
-					hideLoader(); // Hide the loader after fetching data.
-				})
-				.catch(error => {
-					showPopup("something went wrong", "error");
-					console.error('Error:', error);
-					hideLoader(); // Hide the loader if there's an error.
-				});
-		}
-
-		let books = [];
-
-		function displayBooks(bookArray) {
-			books = bookArray;
-			bookList.innerHTML = "";
-			bookArray.forEach((book, index) => {
-				const bookItem = document.createElement("div");
-				bookItem.className = "book";
-				bookItem.innerHTML = `
+      function displayBooks(bookArray) {
+        books = bookArray;
+        bookList.innerHTML = "";
+        bookArray.forEach((book, index) => {
+          const bookItem = document.createElement("div");
+          bookItem.className = "book";
+          bookItem.innerHTML = `
           <h2>${book.bookname}</h2>
           <p>Author: ${book.author}</p>
           <p>Genre: ${book.genre}</p>
           <p>Price: ${book.price} rs</p>
           <button onclick="addToCart(${index})" id=cartButton>Add to Cart</button>`;
-				bookList.appendChild(bookItem);
-			});
-		}
+          bookList.appendChild(bookItem);
+        });
+      }
 
-		getAllBooks();
+      getAllBooks();
 
-		function addToCart(index) {
-			const book = books[index];
-			cartData.push(book);
-			updateCartUI();
-			console.log("book added");
-			showPopup("Book Added to the cart.", "success");
-		}
+      function addToCart(index) {
+        const book = books[index];
+        cartData.push(book);
+        updateCartUI();
+        console.log("book added");
+        showPopup("Book Added to the cart.", "success");
+      }
 
-		function updateCartUI() {
-			cartItems.innerHTML = "";
-			let total = 0;
-			cartData.forEach((book) => {
-				const cartItem = document.createElement("li");
-				cartItem.innerHTML = `
+      function updateCartUI() {
+        cartItems.innerHTML = "";
+        let total = 0;
+        cartData.forEach((book) => {
+          const cartItem = document.createElement("li");
+          cartItem.innerHTML = `
           <span>${book.bookname}</span>
           <span>${book.price} Rs</span>
         `;
-				cartItems.appendChild(cartItem);
-				total += book.price;
-			});
-			totalAmount.textContent = total;
-			cart.textContent = `Cart (${cartData.length})`;
-		}
+          cartItems.appendChild(cartItem);
+          total += book.price;
+        });
+        totalAmount.textContent = total;
+        cart.textContent = `Cart (${cartData.length})`;
+      }
 
-		proceedButton.addEventListener("click", () => {
-			const order = {
-				books: cartData,
-				buyerId: localStorage.getItem("username")
-			}
-			console.log("cart Data", cartData);
-			console.log("order ", order);
-			if (cartData.length > 0) {
-				fetch('http://localhost:8080/library/processOrder', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(order),
-				})
-					.then((response) => {
-						if (response.ok) {
-							return response.text();
-						} else {
-							console.error('Error downloading books');
-						}
-					})
-					.then((base64Content) => {
-						const binaryData = atob(base64Content);
+      proceedButton.addEventListener("click", () => {
+        const order = {
+          books: cartData,
+          buyerId: localStorage.getItem("username"),
+        };
+        console.log("cart Data", cartData);
+        console.log("order ", order);
+        if (cartData.length > 0) {
+          fetch("http://localhost:8080/library/processOrder", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.text();
+              } else {
+                console.error("Error downloading books");
+              }
+            })
+            .then((base64Content) => {
+              const binaryData = atob(base64Content);
 
-						const uint8Array = new Uint8Array(binaryData.length);
-						for (let i = 0; i < binaryData.length; i++) {
-							uint8Array[i] = binaryData.charCodeAt(i);
-						}
+              const uint8Array = new Uint8Array(binaryData.length);
+              for (let i = 0; i < binaryData.length; i++) {
+                uint8Array[i] = binaryData.charCodeAt(i);
+              }
 
-						const blob = new Blob([uint8Array], {type: 'application/zip'});
+              const blob = new Blob([uint8Array], { type: "application/zip" });
 
-						const a = document.createElement('a');
-						a.href = window.URL.createObjectURL(blob);
-						a.download = 'books.zip';
-						a.style.display = 'none';
-						document.body.appendChild(a);
-						a.click();
-						document.body.removeChild(a);
+              const a = document.createElement("a");
+              a.href = window.URL.createObjectURL(blob);
+              a.download = "books.zip";
+              a.style.display = "none";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
 
-						showPopup("Your Order Delivered Succesfully!!", "success");
-					})
-					.catch((error) => {
-						console.error('Error:', error);
-					});
+              showPopup("Your Order Delivered Succesfully!!", "success");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
 
-				cartData = [];
-				updateCartUI();
-				cartOverlay.style.display = "none";
-				cartPopup.style.display = "none";
-			}
-		});
+          cartData = [];
+          updateCartUI();
+          cartOverlay.style.display = "none";
+          cartPopup.style.display = "none";
+        }
+      });
 
+      function showLoader() {
+        const loader = document.getElementById("loader");
+        loader.style.display = "block";
+      }
 
+      function hideLoader() {
+        const loader = document.getElementById("loader");
+        loader.style.display = "none";
+      }
 
-		function showLoader() {
-			const loader = document.getElementById("loader");
-			loader.style.display = "block";
-		}
+      cart.addEventListener("click", () => {
+        if (cartData.length > 0) {
+          cartOverlay.style.display = "block";
+          cartPopup.style.display = "block";
+        }
+      });
 
-		function hideLoader() {
-			const loader = document.getElementById("loader");
-			loader.style.display = "none";
-		}
+      cartOverlay.addEventListener("click", (e) => {
+        if (e.target === cartOverlay) {
+          cartOverlay.style.display = "none";
+          cartPopup.style.display = "none";
+        }
+      });
 
+      const popup = document.querySelector(".popup");
+      const popupContent = document.querySelector(".popup .content");
+      const closePopupButton = document.querySelector(".popup .close");
 
+      // Show the popup with a message
+      function showPopup(message, type) {
+        popupContent.innerText = message;
+        popup.style.visibility = "visible";
+      }
 
-		cart.addEventListener("click", () => {
-			if (cartData.length > 0) {
-				cartOverlay.style.display = "block";
-				cartPopup.style.display = "block";
-			}
-		});
-
-
-		cartOverlay.addEventListener("click", (e) => {
-			if (e.target === cartOverlay) {
-				cartOverlay.style.display = "none";
-				cartPopup.style.display = "none";
-			}
-		});
-
-		const popup = document.querySelector(".popup");
-		const popupContent = document.querySelector(".popup .content");
-		const closePopupButton = document.querySelector(".popup .close");
-
-		// Show the popup with a message
-		function showPopup(message, type) {
-			popupContent.innerText = message;
-			popup.style.visibility = "visible";
-
-		}
-
-		// Close the popup
-		closePopupButton.addEventListener("click", function () {
-			popup.style.visibility = "hidden";
-		});
-
-
-
-	</script>
-</body>
-
+      // Close the popup
+      closePopupButton.addEventListener("click", function () {
+        popup.style.visibility = "hidden";
+      });
+    </script>
+  </body>
 </html>

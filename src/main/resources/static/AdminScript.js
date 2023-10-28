@@ -51,7 +51,6 @@ closePopupButton.addEventListener("click", function() {
 	popup.style.visibility = "hidden";
 });
 
-
 // Function to get Seller details
 function getSellerDetails() {
 	fetch("/api/admin/sellerDetails")
@@ -121,6 +120,7 @@ function updateVerificationStatus(sellerId) {
 				throw new Error("Verification failed. Please try again");
 			} else {
 				showPopup("Seller verified");
+				getSellerDetails();
 			}
 
 			return response.text();
@@ -150,6 +150,7 @@ function removeSeller(sellerId) {
 				throw new Error("Unable to remove Seller");
 			} else {
 				showPopup("Seller removed successfully");
+				getSellerDetails();
 			}
 
 			return response.text();
@@ -190,6 +191,8 @@ function addSeller(userName, password) {
 				throw new Error('Failed to add Seller');
 			} else {
 				showPopup("Seller Added successfully");
+				document.getElementById("addSeller-form").reset();
+				getSellerDetails();
 			}
 
 			return response.text();

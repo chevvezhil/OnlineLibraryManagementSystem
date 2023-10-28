@@ -11,7 +11,7 @@ public class GenreSearchStrategy implements SearchStrategy{
 	public List<Book> search(List<Book> books, String keyword) {
 		
 		//TODO: Change to contains
-			return books.stream().filter(book -> book.getAuthor().equalsIgnoreCase(keyword))
+			return books.stream().filter(book -> book.getGenre().toLowerCase().contains(keyword.toLowerCase()))
 					.collect(Collectors.toList());
 	}
 
