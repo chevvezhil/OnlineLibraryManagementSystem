@@ -495,7 +495,8 @@
 		});
 
 
-		proceedPaymentButton.addEventListener("click", () => {
+		proceedPaymentButton.addEventListener("click", (event) => {
+			event.preventDefault();
 			const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
 
 			const order = {
