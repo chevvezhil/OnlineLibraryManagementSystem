@@ -36,7 +36,6 @@ public class SalesServiceImplementation implements SalesService{
 	
 	private Sales createSalesForBook(Order order, Book book) {
 		
-		System.out.println("Create sales for book");
 		Sales sale = new Sales();
 		
 		Seller seller = sellerService.getSellerByName(book.getSeller());

@@ -50,13 +50,11 @@ public class BookController {
 	@GetMapping(value = "/getBooks")
 	public @ResponseBody List<Book> getAllBooks() {
 		return bookService.getAllBooks();
-
 	}
 
 
 	@PostMapping("/processOrder")
 	public ResponseEntity<String> processOrder(@RequestBody OrderDTO orderDto) {
-
 		
 		Order order = new Order();
 		order.setBooks(orderDto.getBooks());
@@ -74,6 +72,7 @@ public class BookController {
 				new PaymentProcessingHandler(new OrderDownloadHandler(null)));
 
 		String zipFiles = orderProcessingChain.processOrder(order);
+		System.out.println("zip file " + zipFiles);
 		order.setOrderStatus(OrderStatus.SUCCESS);
 		
 		
