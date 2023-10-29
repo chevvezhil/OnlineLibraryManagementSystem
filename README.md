@@ -25,6 +25,7 @@ books.
 
 ### Project ###
 * Developed in Java Spring Boot with HTML and JS for front-end integration.
+* DB - MySql
 
 * Sign up the User as Admin/Buyer/Seller
 * Login as an Admin User
