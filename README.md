@@ -1,9 +1,9 @@
 # Online Library Management System #
 
 ### Team ###
-Chevvanthi E
-Swaminathan G M
-Homeminitha M D
+* Chevvanthi E
+* Swaminathan G M
+* Homeminitha M D
 
 ### Project Requirements ###
 * User Roles: 
