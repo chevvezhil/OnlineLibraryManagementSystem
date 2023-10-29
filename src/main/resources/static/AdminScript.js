@@ -49,7 +49,12 @@ function showPopup(message) {
 // Close the popup
 closePopupButton.addEventListener("click", function() {
 	popup.style.visibility = "hidden";
+	reloadPage();
 });
+
+function reloadPage() {
+	window.location.reload();
+}
 
 // Function to get Seller details
 function getSellerDetails() {

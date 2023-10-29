@@ -30,7 +30,7 @@ import com.library.management.utils.OrderStatus;
 
 @RestController
 @RequestMapping("/library")
-public class OnlineLibraryManagementController {
+public class BookController {
 
 	@Autowired
 	private BooksService bookService;
@@ -50,17 +50,16 @@ public class OnlineLibraryManagementController {
 	@GetMapping(value = "/getBooks")
 	public @ResponseBody List<Book> getAllBooks() {
 		return bookService.getAllBooks();
-
 	}
 
 
 	@PostMapping("/processOrder")
 	public ResponseEntity<String> processOrder(@RequestBody OrderDTO orderDto) {
-
 		
 		Order order = new Order();
 		order.setBooks(orderDto.getBooks());
 		order.setBuyerId(orderDto.getBuyerId());
+		order.setModeOfPayment(orderDto.getPaymentMethod());
 		
 		Seller seller = new Seller();
 		Admin admin = new Admin();
@@ -73,6 +72,7 @@ public class OnlineLibraryManagementController {
 				new PaymentProcessingHandler(new OrderDownloadHandler(null)));
 
 		String zipFiles = orderProcessingChain.processOrder(order);
+		System.out.println("zip file " + zipFiles);
 		order.setOrderStatus(OrderStatus.SUCCESS);
 		
 		

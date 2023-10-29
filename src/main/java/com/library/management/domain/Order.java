@@ -50,6 +50,9 @@ public class Order {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "order_status")
 	public OrderStatus orderStatus;
+	
+	@Column(name = "payment_mode")
+	public String modeOfPayment;
 
 	@Transient
 	private List<Observer> observers = new ArrayList<>();
