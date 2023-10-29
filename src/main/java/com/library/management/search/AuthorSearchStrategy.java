@@ -10,7 +10,7 @@ public class AuthorSearchStrategy implements SearchStrategy {
 	@Override
 	public List<Book> search(List<Book> books, String keyword) {
 		
-		return books.stream().filter(book -> book.getAuthor().equalsIgnoreCase(keyword))
+		return books.stream().filter(book -> book.getAuthor().toLowerCase().contains(keyword.toLowerCase()))
 				.collect(Collectors.toList());
 				
 	}

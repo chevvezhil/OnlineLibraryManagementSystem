@@ -11,7 +11,7 @@ public class BookNameSearchStrategy implements SearchStrategy{
 	public List<Book> search(List<Book> books, String keyword) {
 		System.out.println("Book name strategy");
 		
-		return books.stream().filter(book -> book.getBookname().startsWith(keyword))
+		return books.stream().filter(book -> book.getBookname().toLowerCase().contains(keyword.toLowerCase()))
 				.collect(Collectors.toList());
 	}
 
