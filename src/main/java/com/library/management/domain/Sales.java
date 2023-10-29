@@ -1,8 +1,6 @@
 package com.library.management.domain;
 
 import java.util.Date;
-import java.util.List;
-
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import lombok.Data;
