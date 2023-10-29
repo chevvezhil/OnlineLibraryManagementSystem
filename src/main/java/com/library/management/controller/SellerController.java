@@ -10,100 +10,86 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.library.management.domain.Book;
 import com.library.management.domain.Sales;
 import com.library.management.domain.Seller;
-import com.library.management.service.BooksService;
+import com.library.management.domain.User;
+import com.library.management.domain.UserSellerRequest;
 import com.library.management.service.SalesService;
 import com.library.management.service.SellerService;
+import com.library.management.service.UserService;
+import com.library.management.utils.VerificationStatus;
 
 @RestController
-@RequestMapping("/api/seller")
+@RequestMapping("/library/seller")
 public class SellerController {
-	
-	@Autowired
-	private BooksService bookService;
-	
+
 	@Autowired
 	private SellerService sellerService;
 	
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private SalesService salesService;
-	
-	@PostMapping("/uploadBook")
+
+	@GetMapping("/sellerDetails")
 	@ResponseBody
-	public ResponseEntity<?> handleFileUpload(@RequestPart("pdfFile") MultipartFile file,
-			@RequestParam("bookname") String bookName, @RequestParam("author") String author,
-			@RequestParam("genre") String genre, @RequestParam("price") double price,
-			@RequestParam("seller") String sellerName) {
-
-		System.out.println("book data " + bookName + " " + author + " " + genre + " " + price + "seller " + sellerName);
-
-		Book book = new Book(bookName, author, genre, price, sellerName);
-		bookService.handleBookUpload(book, file);
-
-		System.out.println("Book uploaded");
-		return ResponseEntity.status(HttpStatus.OK).build();
-
+	public ResponseEntity<List<Seller>> getSellerDetails() {
+		List<Seller> response = sellerService.getAllSellers();
+		System.out.println("Retrived All the sellers");
+		return ResponseEntity.ok(response);
 	}
-	
-	@GetMapping("/books/{sellerName}")
-    public ResponseEntity<List<Book>> getBooksBySeller(@PathVariable String sellerName) {
-        List<Book> books = bookService.getBooksBySeller(sellerName);
 
-        if (books.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        }
-    }
-	
-	@PostMapping("/updateBookPrice")
+	@PostMapping("/updateVerificationStatus")
 	@ResponseBody
-	public ResponseEntity<?> updateBookPrice(@RequestBody Book book) {
-
-		System.out.println("book data " + book.getBookId() + " " + book.getPrice());
-
-		bookService.updateBookPrice(book.getBookId(), book.getPrice());
-
-		System.out.println("Book Price is updated");
-		return ResponseEntity.status(HttpStatus.OK).build();
-
-	}
-	
-	@PostMapping("/deleteBook")
-	@ResponseBody
-	public ResponseEntity<?> deleteBook(@RequestBody Book book) {
-		bookService.deleteBook(book.getBookId());
+	public ResponseEntity<?> updateVerificationStatus(@RequestBody Seller seller) {
+		sellerService.updateVerificationStatus(seller.getSellerId(), seller.getVerifiedBy());
+		System.out.println("Updated seller verification status");
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	
+
+	@PostMapping("/removeSeller")
+	@ResponseBody
+	public ResponseEntity<?> removeSeller(@RequestBody Seller seller) {
+		sellerService.removeSeller(seller.getSellerId());
+		userService.removeUser(seller.getSellerId());
+		
+		System.out.println("Seller has been removed successfully");
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@PostMapping("/addSeller")
+	@ResponseBody
+	public ResponseEntity<?> addSellerAndUser(@RequestBody UserSellerRequest request) {
+
+		User user = request.getUser();
+		Seller seller = request.getSeller();
+
+		userService.registerUser(user);
+		sellerService.updateSeller(user.getUserId(), VerificationStatus.VERIFIED, seller.getVerifiedBy(),
+				seller.getAddedByAdmin());
+		System.out.println("Seller has been added successfully");
+
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
 	@GetMapping("/sales/{sellerName}")
 	public ResponseEntity<?> getSalesInfo(@PathVariable String sellerName) {
-		Seller seller = sellerService.getSellerByName(sellerName);
-		Long sellerId = seller.getSellerId();
-		
+
+		Long sellerId = sellerService.getSellerByName(sellerName).getSellerId();
 		List<Sales> sales = salesService.retriveSalesForSeller(sellerId);
 		
-		for(Sales sale : sales) {
-			System.out.println("Sale id " + sale.getSaleId());
-			System.out.println(sale.getSeller().getSellerName());
-			
-			System.out.println("Books  " + sale.getBook().getBookname());
-		 }
-		
-		 if (sales.isEmpty()) {
-	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	        } else {
-	            return new ResponseEntity<>(sales, HttpStatus.OK);
-	       }
-		 
-		 
+		System.out.println("Saled information retrived");
+
+
+		if (sales.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(sales, HttpStatus.OK);
+		}
 	}
 }

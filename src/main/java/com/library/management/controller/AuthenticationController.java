@@ -12,7 +12,7 @@ import com.library.management.domain.User;
 import com.library.management.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/library/users")
 public class AuthenticationController {
 
 	@Autowired
@@ -21,7 +21,6 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	@ResponseBody
 	public ResponseEntity<String> addNewUser(@RequestBody User user) {
-		System.out.println("usr info " + user.getUserName());
 		 if(userService.registerUser(user))
 			 return ResponseEntity.ok("User registered successfully");
 		 else

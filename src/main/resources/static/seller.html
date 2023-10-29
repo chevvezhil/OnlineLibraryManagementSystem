@@ -259,7 +259,7 @@
 
 
 
-		const baseUrl = "http://localhost:8080/api/seller";
+		const baseUrl = "http://localhost:8080/library/book";
 		document
 			.getElementById("book-form")
 			.addEventListener("submit", function (e) {
@@ -365,7 +365,7 @@
 
 			console.log("request ", request);
 
-			fetch("api/seller/updateBookPrice", {
+			fetch(`${baseUrl}/updateBookPrice`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -392,7 +392,7 @@
 				bookId: bookId
 			};
 
-			fetch("api/seller/deleteBook", {
+			fetch(`${baseUrl}/deleteBook`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -472,7 +472,7 @@
 
 		function trackSales() {
 			console.log("Track sales ");
-			fetch(`${baseUrl}/sales/${username}`)
+			fetch(`http://localhost:8080/library/seller/sales/${username}`)
 				.then((response) => {
 					if (!response.ok) {
 						throw new Error("Unable to fetch sales details");
