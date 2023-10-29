@@ -40,7 +40,7 @@ public class BookController {
 	
 	@PostMapping("/uploadBook")
 	@ResponseBody
-	public ResponseEntity<?> handleFileUpload(@RequestPart("pdfFile") MultipartFile file,
+	public ResponseEntity<?> uploadBook(@RequestPart("pdfFile") MultipartFile file,
 			@RequestParam("bookname") String bookName, @RequestParam("author") String author,
 			@RequestParam("genre") String genre, @RequestParam("price") double price,
 			@RequestParam("seller") String sellerName) {

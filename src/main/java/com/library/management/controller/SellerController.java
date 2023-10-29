@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.library.management.domain.Sales;
 import com.library.management.domain.Seller;
 import com.library.management.domain.User;
-import com.library.management.domain.UserSellerRequest;
+import com.library.management.dto.UserSellerRequest;
 import com.library.management.service.SalesService;
 import com.library.management.service.SellerService;
 import com.library.management.service.UserService;
@@ -37,7 +37,7 @@ public class SellerController {
 
 	@GetMapping("/sellerDetails")
 	@ResponseBody
-	public ResponseEntity<List<Seller>> getSellerDetails() {
+	public ResponseEntity<List<Seller>> getAllSeller() {
 		List<Seller> response = sellerService.getAllSellers();
 		System.out.println("Retrived All the sellers");
 		return ResponseEntity.ok(response);
@@ -63,14 +63,14 @@ public class SellerController {
 
 	@PostMapping("/addSeller")
 	@ResponseBody
-	public ResponseEntity<?> addSellerAndUser(@RequestBody UserSellerRequest request) {
+	public ResponseEntity<?> addSellerByAdmin(@RequestBody UserSellerRequest request) {
 
 		User user = request.getUser();
 		Seller seller = request.getSeller();
 
 		userService.registerUser(user);
 		sellerService.updateSeller(user.getUserId(), VerificationStatus.VERIFIED, seller.getVerifiedBy(),
-				seller.getAddedByAdmin());
+				seller.getIsAddedByAdmin());
 		System.out.println("Seller has been added successfully");
 
 		
@@ -84,7 +84,6 @@ public class SellerController {
 		List<Sales> sales = salesService.retriveSalesForSeller(sellerId);
 		
 		System.out.println("Saled information retrived");
-
 
 		if (sales.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

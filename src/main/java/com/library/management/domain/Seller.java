@@ -35,7 +35,7 @@ public class Seller implements Observer{
 	private String verifiedBy;
 	
 	@Column(name = "addedByAdmin", columnDefinition="boolean default false")
-	private Boolean addedByAdmin;
+	private Boolean isAddedByAdmin;
 
 	public Seller (Long sellerId, String sellerName, VerificationStatus verificationStatus) {
 		this.sellerId = sellerId;

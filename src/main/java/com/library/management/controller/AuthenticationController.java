@@ -20,7 +20,7 @@ public class AuthenticationController {
 
 	@PostMapping("/register")
 	@ResponseBody
-	public ResponseEntity<String> addNewUser(@RequestBody User user) {
+	public ResponseEntity<String> registerUser(@RequestBody User user) {
 		 if(userService.registerUser(user))
 			 return ResponseEntity.ok("User registered successfully");
 		 else
