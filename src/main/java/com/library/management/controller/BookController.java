@@ -30,7 +30,7 @@ import com.library.management.utils.OrderStatus;
 
 @RestController
 @RequestMapping("/library")
-public class OnlineLibraryManagementController {
+public class BookController {
 
 	@Autowired
 	private BooksService bookService;
@@ -61,6 +61,7 @@ public class OnlineLibraryManagementController {
 		Order order = new Order();
 		order.setBooks(orderDto.getBooks());
 		order.setBuyerId(orderDto.getBuyerId());
+		order.setModeOfPayment(orderDto.getPaymentMethod());
 		
 		Seller seller = new Seller();
 		Admin admin = new Admin();

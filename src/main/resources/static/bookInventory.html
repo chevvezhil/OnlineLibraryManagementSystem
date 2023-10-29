@@ -427,7 +427,7 @@
 			cartData.push(book);
 			updateCartUI();
 			console.log("book added");
-			showPopup("Book Added to the cart.", "success");
+			//showPopup("Book Added to the cart.", "success");
 		}
 
 		function updateCartUI() {
@@ -450,29 +450,23 @@
 		const paymentForm = document.getElementById("payment-form");
 		const proceedPaymentButton = document.getElementById("proceed-payment-button");
 		
-		console.log(proceedPaymentButton);
 
 		proceedButton.addEventListener("click", () => {
-			if (cartData.length > 0) {
 				cartOverlay.style.display = "none";
 				cartPopup.style.display = "none";
+				paymentPopup.style.display ="block";
 				paymentPopup.style.visibility = "visible";
-			}
 		});
 
 		proceedPaymentButton.addEventListener("click", () => {
 
 			const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
 
-
 			const order = {
 				books: cartData,
 				buyerId: localStorage.getItem("username"),
-				paymentMethod: selectedPaymentMethod.value
-			}
-			console.log("cart Data", cartData);
-			console.log("order ", order);
-			
+				paymentMethod: selectedPaymentMethod.value,
+			};
 			
 			if (cartData.length > 0) {
 				fetch('http://localhost:8080/library/processOrder', {
@@ -508,15 +502,11 @@
 						document.body.removeChild(a);
 
 						showPopup("Your Order Delivered Succesfully!!", "success");
-					})
-					.catch((error) => {
-						console.error('Error:', error);
 					});
+					
 
 				cartData = [];
 				updateCartUI();
-				cartOverlay.style.display = "none";
-				cartPopup.style.display = "none";
 				paymentPopup.style.display ="none";
 				
 			}
