@@ -10,6 +10,5 @@ import lombok.Data;
 public class OrderDTO {
 	private List<Book> books;
 	private String buyerId;
-	
 	private String paymentMethod;
 }

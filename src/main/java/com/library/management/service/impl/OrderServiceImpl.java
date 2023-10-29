@@ -6,24 +6,26 @@ import org.springframework.stereotype.Service;
 import com.library.management.domain.Order;
 import com.library.management.repository.OrderRepository;
 import com.library.management.service.OrderService;
+import com.library.management.utils.OrderStatus;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
-	
-	
 
 	@Override
 	public Order createOrder(Order order) {
-		
-		System.out.println("Inside create Order");
-		
-		 Order createdOrder = orderRepository.save(order);
-		 
-		 System.out.println("Order saved");
-	    return createdOrder;
+		 return orderRepository.save(order);
 	}
+	
+	@Override
+	public void updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+		Order orderInfo = orderRepository.getReferenceById(orderId);
+		orderInfo.setOrderStatus(orderStatus);
+		orderRepository.save(orderInfo);
+	}
+	
+	
 
 }

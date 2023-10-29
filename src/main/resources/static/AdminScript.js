@@ -58,7 +58,7 @@ function reloadPage() {
 
 // Function to get Seller details
 function getSellerDetails() {
-	fetch("/api/admin/sellerDetails")
+	fetch("/library/seller/sellerDetails")
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error("Network response was not ok");
@@ -112,7 +112,7 @@ function updateVerificationStatus(sellerId) {
 		verifiedBy: localStorage.getItem("username")
 	};
 
-	fetch("api/admin/updateVerificationStatus", {
+	fetch("/library/sellern/updateVerificationStatus", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -142,7 +142,7 @@ function removeSeller(sellerId) {
 		sellerId: sellerId
 	};
 
-	fetch("api/admin/removeSeller", {
+	fetch("library/seller/removeSeller", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -183,7 +183,7 @@ function addSeller(userName, password) {
 		user,
 		seller,
 	};
-	fetch("/api/admin/addSeller", {
+	fetch("library/seller/addSeller", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -209,7 +209,7 @@ function addSeller(userName, password) {
 
 //Get book inventory
 function getAllBooks() {
-	fetch("/library/getBooks")
+	fetch("/library/book/getBooks")
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error("Unable to fetch book details");

@@ -12,7 +12,6 @@ import com.library.management.domain.Order;
 import com.library.management.domain.Sales;
 import com.library.management.domain.Seller;
 import com.library.management.repository.SalesRepository;
-import com.library.management.repository.SellerRepository;
 import com.library.management.service.SalesService;
 import com.library.management.service.SellerService;
 
@@ -27,9 +26,7 @@ public class SalesServiceImplementation implements SalesService{
 	
 	public void recordSales(Order order) {
 		 
-		System.out.println("Inside record sales ");
 		List<Sales> sales = order.getBooks().stream().map(book -> createSalesForBook(order,book)).collect(Collectors.toList());
-		 
 		salesRepository.saveAll(sales);
 		 
 	}

@@ -139,44 +139,6 @@
 			border-radius: 5px;
 			font-size: 16px;
 		}
-
-		#loader {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(255, 255, 255, 0.7);
-			/* Semi-transparent white background */
-			z-index: 1000;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.spinner {
-			border: 4px solid rgba(255, 255, 255, 0.3);
-			/* Light gray border */
-			border-top: 4px solid #007bff;
-			/* Blue border (adjust color as needed) */
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			animation: spin 1s linear infinite;
-			/* Add a spinning animation */
-		}
-
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-
-			100% {
-				transform: rotate(360deg);
-			}
-		}
-
 		.popup {
 			position: fixed;
 			top: 50%;
@@ -309,9 +271,6 @@
 		<button id="proceed-button">Proceed to Payment</button>
 	</div>
 
-	<div id="loader">
-		<div class="spinner"></div>
-	</div>
 
 	<div class="popup overlay">
 		<a class="close" href="#">&times;</a>
@@ -341,21 +300,6 @@
 	</div>
 
 	<script>
-		hideLoader();
-
-		document.addEventListener('click', function (event) {
-			// Access the clicked element using event.target
-			const clickedElement = event.target;
-
-			// Now, you can do something with the clicked element
-			console.log('Element clicked:', clickedElement);
-
-			// You can also access attributes, such as id, class, or tag name
-			console.log('Element ID:', clickedElement.id);
-			console.log('Element Class:', clickedElement.className);
-			console.log('Element Tag Name:', clickedElement.tagName);
-		});
-
 
 		const baseUrl = "http://localhost:8080/library";
 
@@ -397,10 +341,9 @@
 				const encodedCriteria = encodeURIComponent(criteria);
 				const encodedKeyword = encodeURIComponent(keyword);
 
-				showLoader();
 
 				fetch(
-					`http://localhost:8080/library/searchBooks/${encodedCriteria}/${encodedKeyword}`
+					`http://localhost:8080/library/book/searchBooks/${encodedCriteria}/${encodedKeyword}`
 				)
 					.then((response) => response.json())
 					.then((data) => {
@@ -409,28 +352,23 @@
 						} else {
 							displayBooks(data);
 						}
-						hideLoader(); // Hide the loader after fetching data.
 					})
 					.catch((error) => {
 						showPopup("something went wrong", "error");
 						console.error("Error:", error);
-						hideLoader(); // Hide the loader if there's an error.
 					});
 			}
 		}
 
 		function getAllBooks() {
-			showLoader();
-			fetch(`${baseUrl}/getBooks`)
+			fetch(`${baseUrl}/book/getBooks`)
 				.then((response) => response.json())
 				.then((data) => {
 					displayBooks(data);
-					hideLoader(); // Hide the loader after fetching data.
 				})
 				.catch((error) => {
 					showPopup("something went wrong", "error");
 					console.error("Error:", error);
-					hideLoader(); // Hide the loader if there's an error.
 				});
 		}
 
@@ -507,7 +445,7 @@
 
 			console.log("order ", order);
 			if (cartData.length > 0) {
-				fetch("http://localhost:8080/library/processOrder", {
+				fetch("http://localhost:8080/library/order/processOrder", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -551,15 +489,6 @@
 			}
 		});
 
-		function showLoader() {
-			const loader = document.getElementById("loader");
-			loader.style.display = "block";
-		}
-
-		function hideLoader() {
-			const loader = document.getElementById("loader");
-			loader.style.display = "none";
-		}
 
 		cart.addEventListener("click", () => {
 			if (cartData.length > 0) {

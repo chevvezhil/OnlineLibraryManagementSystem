@@ -61,7 +61,7 @@ public class SellerServiceImpl implements SellerService {
 		var updateRecord = sellerRepository.getReferenceById(sellerId);
 		updateRecord.setVerificationStatus(status);
 		updateRecord.setVerifiedBy(verifiedBy);
-		updateRecord.setAddedByAdmin(addedByAdmin);
+		updateRecord.setIsAddedByAdmin(addedByAdmin);
 		sellerRepository.save(updateRecord);
 	}
 	

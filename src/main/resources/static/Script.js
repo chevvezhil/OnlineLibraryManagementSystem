@@ -56,7 +56,7 @@ closePopupButton.addEventListener("click", function() {
 });
 
 // Base URL for the API
-const baseUrl = 'http://localhost:8080/api/users';
+const baseUrl = 'http://localhost:8080/library/users';
 
 // Function to handle user registration
 function registerUser(username, password, roles) {
