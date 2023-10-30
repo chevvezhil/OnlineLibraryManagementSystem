@@ -10,7 +10,6 @@ public class OrderValidationHandler extends OrderHandler {
 	
 	
 	public OrderValidationHandler(OrderHandler orderHandler) {
-		
 		super(orderHandler);
 	}
 
