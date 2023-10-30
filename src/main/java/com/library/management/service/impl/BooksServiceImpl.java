@@ -24,6 +24,9 @@ public class BooksServiceImpl implements BooksService {
 
 	@Autowired
 	private BooksRepository bookRepository;
+	
+	@Autowired
+	private SearchService searchService;
 
 	@Override
 	public void handleBookUpload(Book book, MultipartFile file) {
@@ -49,9 +52,8 @@ public class BooksServiceImpl implements BooksService {
 
 	@Override
 	public List<Book> searchBook(String criteria, String keyword) {
-		SearchService search = new SearchService();
-		search.setSearchStrategy(criteria);
-		return search.searchBooks(keyword,getAllBooks());
+		searchService.setSearchStrategy(criteria);
+		return searchService.searchBooks(keyword,getAllBooks());
 	}
 
 	public List<Book> getAllBooks() {

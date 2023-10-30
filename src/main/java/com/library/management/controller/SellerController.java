@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.library.management.domain.Sales;
 import com.library.management.domain.Seller;
 import com.library.management.domain.User;
-import com.library.management.dto.UserSellerRequest;
+import com.library.management.dto.UserSellerDto;
 import com.library.management.service.SalesService;
 import com.library.management.service.SellerService;
 import com.library.management.service.UserService;
@@ -63,7 +63,7 @@ public class SellerController {
 
 	@PostMapping("/addSeller")
 	@ResponseBody
-	public ResponseEntity<?> addSellerByAdmin(@RequestBody UserSellerRequest request) {
+	public ResponseEntity<?> addSellerByAdmin(@RequestBody UserSellerDto request) {
 
 		User user = request.getUser();
 		Seller seller = request.getSeller();
