@@ -112,7 +112,7 @@ function updateVerificationStatus(sellerId) {
 		verifiedBy: localStorage.getItem("username")
 	};
 
-	fetch("/library/sellern/updateVerificationStatus", {
+	fetch("/library/seller/updateVerificationStatus", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
