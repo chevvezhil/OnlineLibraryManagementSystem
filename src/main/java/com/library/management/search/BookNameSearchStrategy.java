@@ -9,7 +9,6 @@ public class BookNameSearchStrategy implements SearchStrategy{
 
 	@Override
 	public List<Book> search(List<Book> books, String keyword) {
-		System.out.println("Book name strategy");
 		
 		return books.stream().filter(book -> book.getBookname().toLowerCase().contains(keyword.toLowerCase()))
 				.collect(Collectors.toList());

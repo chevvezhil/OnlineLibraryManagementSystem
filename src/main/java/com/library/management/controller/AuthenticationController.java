@@ -34,7 +34,7 @@ public class AuthenticationController {
 		User userInfo = userService.authenticateUser(user.getUserName(), user.getPassword());
 
 		if(userInfo.getUserRole().equalsIgnoreCase("seller") && !userService.isSellerVerified(user.getUserName())) 
-				return ResponseEntity.badRequest().body("You are not verified. Please contact admin");
+				return ResponseEntity.badRequest().body("Thank you for registering with us. You will be verified by the admin to proceed further");
 			
 		return ResponseEntity.ok(userInfo.getUserRole());
 		

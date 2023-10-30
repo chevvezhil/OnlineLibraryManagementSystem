@@ -10,7 +10,6 @@ public class GenreSearchStrategy implements SearchStrategy{
 	@Override
 	public List<Book> search(List<Book> books, String keyword) {
 		
-		//TODO: Change to contains
 			return books.stream().filter(book -> book.getGenre().toLowerCase().contains(keyword.toLowerCase()))
 					.collect(Collectors.toList());
 	}
